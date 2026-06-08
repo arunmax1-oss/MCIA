@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logpoint / Guardsix — Competitive Brief | June 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --surface3: #21293a;
+    --border: #30363d;
+    --border-light: #21293a;
+    --text: #e6edf3;
+    --text-light: #8b949e;
+    --text-muted: #484f58;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --accent3: #f78166;
+    --accent4: #d2a8ff;
+    --warn: #f0883e;
+    --warn-bg: rgba(240,136,62,0.1);
+    --opp-bg: rgba(63,185,80,0.1);
+    --threat-bg: rgba(248,81,73,0.1);
+    --threat: #f85149;
+    --yellow: #e3b341;
+    --yellow-bg: rgba(227,179,65,0.1);
+    --radius: 6px;
+    --radius-lg: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .header-scan {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(88,166,255,0.02) 2px,
+      rgba(88,166,255,0.02) 4px
+    );
+    pointer-events: none;
+  }
+  .header-glow {
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(88,166,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 40px 40px;
+    position: relative;
+    z-index: 1;
+  }
+  .header-badge-row {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 20px;
+  }
+  .badge-chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+    border: 1px solid;
+  }
+  .chip-blue { color: var(--accent); border-color: rgba(88,166,255,0.4); background: rgba(88,166,255,0.08); }
+  .chip-yellow { color: var(--yellow); border-color: rgba(227,179,65,0.4); background: var(--yellow-bg); }
+  .chip-green { color: var(--accent2); border-color: rgba(63,185,80,0.4); background: var(--opp-bg); }
+  .chip-red { color: var(--threat); border-color: rgba(248,81,73,0.4); background: var(--threat-bg); }
+  .chip-orange { color: var(--warn); border-color: rgba(240,136,62,0.4); background: var(--warn-bg); }
+  .chip-purple { color: var(--accent4); border-color: rgba(210,168,255,0.4); background: rgba(210,168,255,0.08); }
+
+  .header h1 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .header h1 .dim { color: var(--text-light); }
+  .header h1 .hi { color: var(--accent); }
+  .header h1 .arrow { color: var(--accent2); }
+  .header-sub {
+    font-size: 15px;
+    color: var(--text-light);
+    max-width: 600px;
+    margin-bottom: 28px;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+  .header-meta {
+    display: flex; gap: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    width: fit-content;
+  }
+  .meta-item {
+    padding: 10px 20px;
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .meta-item:last-child { border-right: none; }
+  .meta-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .meta-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── REBRAND ALERT ── */
+  .rebrand-alert {
+    background: var(--yellow-bg);
+    border: 1px solid rgba(227,179,65,0.3);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .alert-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .alert-text h4 { color: var(--yellow); font-size: 13px; margin-bottom: 4px; }
+  .alert-text p { font-size: 13px; color: var(--text-light); margin: 0; }
+
+  /* ── NAV ── */
+  .toc-nav {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .toc-nav ul {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px;
+    list-style: none;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .toc-nav ul li a {
+    display: block;
+    padding: 11px 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .toc-nav ul li a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: rgba(88,166,255,0.05);
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 40px 80px; }
+  section { padding-top: 52px; }
+
+  .section-label {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 6px;
+  }
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+  }
+  .section-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 24px;
+    line-height: 1.3;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+  h4 { font-size: 13px; font-weight: 500; color: var(--text-light); margin-bottom: 6px; }
+  p { color: var(--text-light); margin-bottom: 10px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    flex-wrap: wrap;
+  }
+  .card-header-left h3 { margin: 0; font-size: 16px; }
+  .card-header-left .sub { color: var(--text-muted); font-size: 12px; margin-top: 3px; font-family: 'IBM Plex Mono', monospace; }
+  .card-body { padding: 20px; }
+  .card-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* ── LISTS ── */
+  .bullet-list { list-style: none; }
+  .bullet-list li {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+  .bullet-list li:last-child { border-bottom: none; }
+  .bul {
+    width: 6px; height: 6px; border-radius: 50%;
+    margin-top: 7px; flex-shrink: 0;
+  }
+  .bul-blue { background: var(--accent); }
+  .bul-green { background: var(--accent2); }
+  .bul-red { background: var(--threat); }
+  .bul-yellow { background: var(--yellow); }
+  .bul-grey { background: var(--text-muted); }
+  .bul-purple { background: var(--accent4); }
+
+  .col-section {}
+  .col-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── CALLOUT BLOCKS ── */
+  .callout {
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    border-left: 3px solid;
+  }
+  .callout.blue { border-left-color: var(--accent); background: rgba(88,166,255,0.06); }
+  .callout.green { border-left-color: var(--accent2); background: var(--opp-bg); }
+  .callout.red { border-left-color: var(--threat); background: var(--threat-bg); }
+  .callout.yellow { border-left-color: var(--yellow); background: var(--yellow-bg); }
+  .callout.purple { border-left-color: var(--accent4); background: rgba(210,168,255,0.06); }
+  .callout h4 { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+  .callout.blue h4 { color: var(--accent); }
+  .callout.green h4 { color: var(--accent2); }
+  .callout.red h4 { color: var(--threat); }
+  .callout.yellow h4 { color: var(--yellow); }
+  .callout.purple h4 { color: var(--accent4); }
+  .callout p { font-size: 13px; margin: 0; }
+
+  /* ── EXEC SUMMARY CARDS ── */
+  .exec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+  .exec-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+  }
+  .exec-card.opp { border-top: 3px solid var(--accent2); }
+  .exec-card.threat { border-top: 3px solid var(--threat); }
+  .exec-card-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .opp .exec-card-label { color: var(--accent2); }
+  .threat .exec-card-label { color: var(--threat); }
+  .exec-card h4 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .exec-card p { font-size: 13px; margin: 0; }
+
+  /* ── TABS ── */
+  .tab-bar {
+    display: flex; gap: 2px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius) var(--radius) 0 0;
+    padding: 6px 6px 0;
+    border-bottom: none;
+    margin-bottom: 0;
+    overflow-x: auto;
+  }
+  .tab-btn {
+    padding: 8px 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid transparent;
+    border-bottom: none;
+    white-space: nowrap;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+  .tab-btn:hover { color: var(--text); background: var(--surface3); }
+  .tab-btn.active {
+    color: var(--accent);
+    background: var(--surface);
+    border-color: var(--border);
+    border-bottom-color: var(--surface);
+    margin-bottom: -1px;
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .tab-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) var(--radius-lg);
+    padding: 24px;
+  }
+
+  /* ── MATRIX TABLE ── */
+  .matrix-wrap {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .matrix-table thead tr {
+    background: var(--surface3);
+  }
+  .matrix-table thead th {
+    padding: 12px 14px;
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .matrix-table thead th.hi-col { color: var(--accent); }
+  .matrix-table tbody tr { border-bottom: 1px solid var(--border-light); }
+  .matrix-table tbody tr:last-child { border-bottom: none; }
+  .matrix-table tbody tr:hover { background: rgba(88,166,255,0.03); }
+  .matrix-table tbody td {
+    padding: 10px 14px;
+    vertical-align: top;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+  .matrix-table tbody td:first-child {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    min-width: 140px;
+  }
+  .matrix-table tbody td.hi-col { color: var(--text); font-weight: 500; }
+  .check { color: var(--accent2); font-weight: 700; }
+  .cross { color: var(--threat); }
+  .partial { color: var(--yellow); }
+
+  /* ── OPP/THREAT ── */
+  .ot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .ot-item {
+    display: flex; gap: 12px; padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .ot-item:last-child { border-bottom: none; }
+  .ot-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    min-width: 26px;
+    padding-top: 1px;
+    flex-shrink: 0;
+  }
+  .ot-num.opp { color: var(--accent2); }
+  .ot-num.thr { color: var(--threat); }
+  .ot-body h4 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .ot-body p { font-size: 12px; color: var(--text-muted); margin: 0; }
+
+  /* ── RECOMMENDATIONS ── */
+  .rec-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .rec-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .rec-head {
+    padding: 10px 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .rec-head.quick { color: var(--accent2); background: var(--opp-bg); border-bottom: 1px solid rgba(63,185,80,0.2); }
+  .rec-head.strategic { color: var(--accent); background: rgba(88,166,255,0.06); border-bottom: 1px solid rgba(88,166,255,0.2); }
+  .rec-head.defensive { color: var(--threat); background: var(--threat-bg); border-bottom: 1px solid rgba(248,81,73,0.2); }
+  .rec-body { padding: 14px; }
+  .rec-body h4 { color: var(--text); font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .rec-body p { font-size: 12px; color: var(--text-muted); margin: 0; }
+
+  /* ── POSITIONING MAP ── */
+  .pos-canvas {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    margin: 20px 0;
+  }
+  .pos-grid {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(var(--border-light) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
+    background-size: 25% 25%;
+    border-left: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .pos-center-h {
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    border-top: 1px dashed rgba(88,166,255,0.2);
+    transform: translateY(-50%);
+  }
+  .pos-center-v {
+    position: absolute;
+    left: 50%; top: 0; bottom: 0;
+    border-left: 1px dashed rgba(88,166,255,0.2);
+    transform: translateX(-50%);
+  }
+  .pos-dot {
+    position: absolute;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.2;
+    transform: translate(-50%, 50%);
+    cursor: default;
+    transition: transform 0.2s;
+  }
+  .pos-dot:hover { transform: translate(-50%, 50%) scale(1.2); z-index: 10; }
+  .pos-dot.g6 { width: 50px; height: 50px; font-size: 10px; border: 2px solid var(--accent); background: #0d2d4f; color: var(--accent); }
+  .pos-dot.splunk { background: #2d1f3f; color: #bf8fef; border: 1px solid #6b4fa3; }
+  .pos-dot.sentinel { background: #0d2a1f; color: #7dd3b8; border: 1px solid #2a7a60; }
+  .pos-dot.exabeam { background: #2a1d10; color: #e09850; border: 1px solid #8a5010; }
+  .pos-dot.elastic { background: #1f2a0d; color: #c8e070; border: 1px solid #5a7a20; }
+  .pos-dot.ibm { background: #0d1a30; color: #6090e0; border: 1px solid #205090; }
+  .pos-dot.crow { background: #2a1010; color: #e07070; border: 1px solid #8a2020; }
+  .axis-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    position: absolute;
+  }
+  .legend-row { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 8px; }
+  .leg-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+  .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .footer-left {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .footer-logo {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    background: rgba(88,166,255,0.08);
+    border: 1px solid rgba(88,166,255,0.3);
+    padding: 6px 12px;
+    border-radius: var(--radius);
+  }
+  .footer-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  @media (max-width: 768px) {
+    .container { padding: 0 20px 60px; }
+    .header-inner { padding: 28px 20px; }
+    .header h1 { font-size: 24px; }
+    .grid-3, .grid-2, .exec-grid, .ot-grid, .rec-grid { grid-template-columns: 1fr; }
+    .header-meta { flex-direction: column; border: none; gap: 8px; }
+    .meta-item { border-right: none; padding: 6px 0; }
+    .footer { flex-direction: column; }
+    .footer-meta { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-scan"></div>
+  <div class="header-glow"></div>
+  <div class="header-inner">
+    <div class="header-badge-row">
+      <span class="badge-chip chip-blue">CI // Security</span>
+      <span class="badge-chip chip-yellow">⚠ Rebranded Mar 2026</span>
+      <span class="badge-chip chip-blue">SIEM · NDR · SOAR</span>
+      <span class="badge-chip chip-green">Monthly Profitability Aug 2025</span>
+    </div>
+    <h1>
+      <span class="dim">Logpoint</span>
+      <span class="arrow"> → </span>
+      <span class="hi">guardsix (g6)</span>
+    </h1>
+    <div class="header-sub">Competitive profile of the European sovereign SecOps vendor — from its Logpoint heritage through the March 2026 rebrand, positioning pivot, and SIEM market context as of June 2026.</div>
+    <div class="header-meta">
+      <div class="meta-item"><span class="meta-val">~$73M</span><span class="meta-label">Est. Revenue (2026)</span></div>
+      <div class="meta-item"><span class="meta-val">263</span><span class="meta-label">Employees</span></div>
+      <div class="meta-item"><span class="meta-val">Mar 2026</span><span class="meta-label">Rebrand Date</span></div>
+      <div class="meta-item"><span class="meta-val">EAL3+</span><span class="meta-label">Common Criteria Cert</span></div>
+      <div class="meta-item"><span class="meta-val">Summa Eq.</span><span class="meta-label">PE Backer</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="toc-nav">
+  <ul>
+    <li><a href="#rebrand">Rebrand Brief</a></li>
+    <li><a href="#exec">Exec Summary</a></li>
+    <li><a href="#profile">G6 Profile</a></li>
+    <li><a href="#competitors">Competitors</a></li>
+    <li><a href="#gartner">Peer Reviews</a></li>
+    <li><a href="#matrix">Matrix</a></li>
+    <li><a href="#posmap">Position Map</a></li>
+    <li><a href="#gaps">Content Gaps</a></li>
+    <li><a href="#opp">Opp & Threats</a></li>
+    <li><a href="#buyers-guide">Buyer's Guide</a></li>
+    <li><a href="#splunk-playbook">Splunk Playbook</a></li>
+    <li><a href="#actions">Actions</a></li>
+    <li><a href="#wargame">War Game</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+  <!-- REBRAND BRIEF -->
+  <section id="rebrand">
+    <div class="section-label">
+      <span class="section-num">00</span>
+      <span class="section-tag">Critical Context</span>
+    </div>
+    <h2>The Logpoint → Guardsix Rebrand — What Changed and Why</h2>
+
+    <div class="rebrand-alert">
+      <span class="alert-icon">⚠️</span>
+      <div class="alert-text">
+        <h4>Recent Development: Logpoint became "guardsix (g6)" on March 12, 2026</h4>
+        <p>Any materials, analyst reports, or competitive documents referencing "Logpoint" that predate March 2026 now describe the same company under a different name. Products, contracts, and support are unchanged — the rebrand is purely a strategic identity and positioning shift, not a product or org restructure.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <div class="callout yellow">
+          <h4>Why "Guardsix"?</h4>
+          <p>The name combines "guard" (defender of essential services) with "six" — from the aviation phrase "got your six," meaning "I've got your back." CEO Mikkel Drucker: <em>"Cybersecurity is never just about software. It's about the people carrying the responsibility when systems fail, regulators call, or attacks hit at 2 a.m."</em></p>
+        </div>
+        <div class="callout blue">
+          <h4>Strategic Signal — What the Rebrand Communicates</h4>
+          <p>The shift from the descriptive "Logpoint" to the alliance-oriented "guardsix" signals three things: (1) a deliberate move away from positioning as a log management tool toward a sovereign SecOps platform; (2) a tighter MSSP-first go-to-market vs. direct enterprise; (3) explicit European geopolitical positioning against US-jurisdictioned vendors (Splunk/Cisco, Microsoft, CrowdStrike) as NIS2 and DORA compliance pressure intensifies.</p>
+        </div>
+      </div>
+      <div>
+        <div class="callout green">
+          <h4>What Didn't Change</h4>
+          <p>Products, platform, code, contracts, SLAs, and support channels are identical post-rebrand. The platform is now called <strong>Command Centre</strong> and bundles SIEM, NDR, SOAR, and fleet management. The Logpoint SIEM name still appears on some partner/reseller sites in transition.</p>
+        </div>
+        <div class="callout purple">
+          <h4>Timing is Strategic</h4>
+          <p>NIS2 enforcement began October 2024. DORA became applicable January 2025. European organizations are actively reassessing US-vendor jurisdictional risk post-CLOUD Act scrutiny. Guardsix is surfing a regulatory tailwind the rebrand was designed to capture — essentially marketing timing matched to a structural market shift.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXEC SUMMARY -->
+  <section id="exec">
+    <div class="section-label">
+      <span class="section-num">01</span>
+      <span class="section-tag">Executive Summary</span>
+    </div>
+    <h2>Where Guardsix Stands — and Where It Can Win</h2>
+    <p>Guardsix (formerly Logpoint) is a mid-market European SIEM specialist that turned a regulatory crisis (NIS2/DORA compliance anxiety, CLOUD Act data sovereignty concerns) into a positioning pivot. Its ~$73M revenue, 263-person team, and EAL3+ certification make it David against Splunk, Sentinel, and CrowdStrike's Goliath — but the sovereign SecOps narrative gives it a genuine, defensible differentiation in European regulated markets and MSSP channels that the hyperscalers cannot credibly match.</p>
+    <div class="exec-grid">
+      <div class="exec-card opp">
+        <div class="exec-card-label">Biggest Opportunity</div>
+        <h4>"The European SIEM for NIS2/DORA-Regulated Environments"</h4>
+        <p>No US vendor can genuinely claim European data sovereignty. Guardsix's on-prem/air-gap deployability, EAL3+ cert, Common Criteria, and Copenhagen HQ give it a structural, not just marketing, advantage in public sector, critical infrastructure, and financial services CISOs prioritising jurisdictional control. The window is open while Cisco/Splunk, Microsoft, and CrowdStrike cannot credibly address CLOUD Act concerns.</p>
+      </div>
+      <div class="exec-card threat">
+        <div class="exec-card-label">Biggest Threat</div>
+        <h4>Microsoft Sentinel + Copilot Makes AI-Driven SIEM the New Baseline</h4>
+        <p>Microsoft's Copilot for Security integration in Sentinel brings natural-language threat hunting to market at scale, raising the AI-feature baseline for every SIEM buyer. Guardsix's AI story (Muninn NDR acquisition, UEBA) is credible but needs sharper external messaging to avoid being perceived as feature-lagging in AI-centric evaluations.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GARTNER PEER INSIGHTS -->
+  <section id="gartner">
+    <div class="section-label">
+      <span class="section-num">01a</span>
+      <span class="section-tag">Voice of the Customer</span>
+    </div>
+    <h2>Gartner Peer Insights — Review Summary</h2>
+
+    <!-- Scorecard row -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 14px;text-align:center;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:600;color:var(--accent);line-height:1;">4.2</div>
+        <div style="font-size:18px;color:var(--yellow);margin:4px 0;">★★★★☆</div>
+        <div style="font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-top:4px;">Overall Rating</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 14px;text-align:center;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:600;color:var(--accent);line-height:1;">372</div>
+        <div style="font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-top:8px;">Verified Reviews</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 14px;text-align:center;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:600;color:var(--accent2);line-height:1;">4.3</div>
+        <div style="font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-top:8px;">vs Splunk 4.3<br><span style="color:var(--text-muted);">on 270 reviews</span></div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 14px;text-align:center;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:600;color:var(--accent2);line-height:1;">4.6</div>
+        <div style="font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-top:8px;">vs Sentinel 4.6<br><span style="color:var(--text-muted);">on 193 reviews</span></div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 14px;text-align:center;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:600;color:var(--accent2);line-height:1;">4.5</div>
+        <div style="font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-top:8px;">vs Exabeam 4.5<br><span style="color:var(--text-muted);">MQ Leader</span></div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:20px;">
+
+      <!-- WHAT REVIEWERS PRAISE -->
+      <div>
+        <div class="col-title">Recurring Praise Themes</div>
+        <ul class="bullet-list">
+          <li><span class="bul bul-green"></span><strong>Deployment simplicity.</strong> Reviewers across company sizes consistently cite easy setup and configuration as a standout. One reviewer: the solution is easy to deploy and configure, with strong support services and responsive vendor assistance. Another: implementation is easy and less hectic.</li>
+          <li><span class="bul bul-green"></span><strong>Vendor support quality.</strong> Support responsiveness is the single most repeated positive across all review cohorts. Multiple reviewers note the service desk is excellent, that it is easy to do business with, and that the team has deep product knowledge. One CISO noted: if there's something it doesn't do, they have a great community and support functions.</li>
+          <li><span class="bul bul-green"></span><strong>Compliance and audit readiness.</strong> Reviewers in healthcare, financial services, and public sector specifically call out compliance management as a core value delivery. One IT professional from a $250M–$500M company: the product has helped us manage compliance, monitor IT operations, detect threats, and respond effectively.</li>
+          <li><span class="bul bul-green"></span><strong>Node-based pricing model.</strong> The licence model draws specific praise as fair and predictable — reviewed as a "pay for the security you gain" model with no log-volume penalty. One reviewer highlights it as subject to European law (not a US product) as a purchasing consideration.</li>
+          <li><span class="bul bul-green"></span><strong>Out-of-the-box detection and dashboards.</strong> Reviewers cite good out-of-the-box SIEM alert rules, clear dashboards, and practical security use cases. One banking industry reviewer: overall Logpoint SIEM has delivered good performance, clear dashboards and practical security use cases that support effective monitoring and incident response.</li>
+          <li><span class="bul bul-green"></span><strong>Highly customisable with transparency.</strong> Reviewers value that the platform is not a black box — it is transparent to integrators and customers, with a minimalist approach of adding features as needed.</li>
+        </ul>
+      </div>
+
+      <!-- WHAT REVIEWERS CRITICISE -->
+      <div>
+        <div class="col-title">Recurring Criticism Themes</div>
+        <ul class="bullet-list">
+          <li><span class="bul bul-red"></span><strong>Parsing complexity for new users.</strong> The most consistent criticism: troubleshooting complex parsing issues can be time consuming for new users. This reflects the product's power and flexibility, but creates a ramp-up burden without guided onboarding resources.</li>
+          <li><span class="bul bul-red"></span><strong>Learning curve.</strong> Multiple reviewers, including a banking industry professional, acknowledge there's still a bit of a learning curve. One reviewer notes the system has become indispensable once mastered, but initial complexity is a friction point.</li>
+          <li><span class="bul bul-red"></span><strong>Incident assignment flexibility.</strong> Reviewers flag that incident assigning could be more flexible — specifically, alert-based assignment would be more practical than the current rule-based assignment model.</li>
+          <li><span class="bul bul-red"></span><strong>Default Windows AD alert coverage.</strong> One reviewer notes insufficient default alerts specifically for Windows Active Directory, requiring custom rule development.</li>
+          <li><span class="bul bul-red"></span><strong>SAP interface and search performance.</strong> BCS for SAP reviewers note the interface can be a bit crowded and searches run slowly when there is a lot of data. SAP-specific documentation was also flagged as thin.</li>
+          <li><span class="bul bul-red"></span><strong>Update communications.</strong> One reviewer notes it would be good to have more information regarding software updates and new features — a transparency gap with an otherwise highly rated vendor relationship.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- REVIEWER DEMOGRAPHICS -->
+    <div class="col-title" style="margin-bottom:14px;">Reviewer Profile — Who Is Buying &amp; Reviewing</div>
+    <div class="grid-3" style="margin-bottom:20px;">
+      <div class="card">
+        <div class="card-header" style="padding:12px 16px;">
+          <h3 style="font-size:13px;margin:0;">Industries Represented</h3>
+        </div>
+        <div class="card-body" style="padding:14px 16px;">
+          <ul class="bullet-list">
+            <li><span class="bul bul-blue"></span>IT Services &amp; MSSPs — largest cohort; validates MSSP-first GTM</li>
+            <li><span class="bul bul-blue"></span>Banking &amp; Financial Services — including $30B+ enterprises</li>
+            <li><span class="bul bul-blue"></span>Healthcare — aligns with Guardsix's regulated-sector ICP</li>
+            <li><span class="bul bul-blue"></span>Government &amp; Public Sector</li>
+            <li><span class="bul bul-blue"></span>Manufacturing &amp; Industrial (incl. OT environments)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" style="padding:12px 16px;">
+          <h3 style="font-size:13px;margin:0;">Company Sizes</h3>
+        </div>
+        <div class="card-body" style="padding:14px 16px;">
+          <ul class="bullet-list">
+            <li><span class="bul bul-blue"></span>Mid-market predominant (&lt;$500M) — consistent with positioning</li>
+            <li><span class="bul bul-blue"></span>Notable $30B+ enterprise reviews (banking) — upmarket signal</li>
+            <li><span class="bul bul-blue"></span>Small organisations (&lt;$50M) — cost-effective positioning resonating</li>
+            <li><span class="bul bul-blue"></span>Broad range signals ICP breadth, not a single-size customer base</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" style="padding:12px 16px;">
+          <h3 style="font-size:13px;margin:0;">Reviewer Functions</h3>
+        </div>
+        <div class="card-body" style="padding:14px 16px;">
+          <ul class="bullet-list">
+            <li><span class="bul bul-blue"></span>IT Security &amp; Risk Management — primary buying function</li>
+            <li><span class="bul bul-blue"></span>IT/Infrastructure operations — deployment engineers and admins</li>
+            <li><span class="bul bul-blue"></span>CISOs — strategic buyers, particularly in manufacturing and government</li>
+            <li><span class="bul bul-blue"></span>GRC / Information Security Analysts — compliance-led buyers</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- CI IMPLICATIONS -->
+    <div class="col-title" style="margin-bottom:12px;">CI Implications — What the Review Data Tells Us</div>
+    <div class="grid-2">
+      <div class="callout green">
+        <h4>Competitive Strengths to Amplify in Marketing</h4>
+        <p>Support quality and deployment simplicity are not being communicated loudly enough externally — they are the two highest-frequency praise themes but neither appears prominently in the public website messaging. Node-based pricing praise also validates the TCO argument in the Splunk displacement playbook. The banking-industry $30B+ reviewer signals that the "mid-market only" perception is not accurate — Guardsix should actively promote enterprise-tier case studies where they exist.</p>
+      </div>
+      <div class="callout yellow">
+        <h4>Weaknesses Competitors Will Exploit in Deals</h4>
+        <p>The parsing complexity and learning curve themes are real and will appear in competitive sales cycles — expect Splunk and Sentinel reps to amplify these in POC comparisons. Guardsix should invest in onboarding documentation, guided parsers, and a pre-built AD alert content pack specifically to neutralise the two most-cited criticisms before they surface in evaluations. The SAP interface density issue should also be addressed ahead of any structured DORA-focused financial services push.</p>
+      </div>
+    </div>
+
+    <p style="font-size:11px;color:var(--text-muted);margin-top:16px;margin-bottom:0;">Source: Gartner Peer Insights, guardsix-siem product page and comparison pages. 372 verified reviews as of June 2026. Review snippets are paraphrased in compliance with copyright guidelines; direct quotations kept under 15 words. Ratings rounded to one decimal. Competitor ratings drawn from Gartner comparison pages for the same market category.</p>
+  </section>
+
+  <!-- GUARDSIX PROFILE -->
+  <section id="profile">
+    <div class="section-label">
+      <span class="section-num">02</span>
+      <span class="section-tag">Subject Company Profile</span>
+    </div>
+    <h2>Guardsix (g6) — Full Profile</h2>
+
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <div class="card-header-left">
+          <h3>guardsix (formerly Logpoint)</h3>
+          <div class="sub">Copenhagen, Denmark · Founded 2002 · PE: Summa Equity · ~$73M Revenue · 263 employees</div>
+        </div>
+        <div class="card-badges">
+          <span class="badge-chip chip-blue">EAL3+ Certified</span>
+          <span class="badge-chip chip-green">SOC 2 Type II</span>
+          <span class="badge-chip chip-blue">Profitability: Aug 2025</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="callout blue">
+          <h4>Core Value Proposition</h4>
+          <p>A sovereign security operations platform for MSSPs and regulated European organisations. Unified Command Centre combines SIEM, NDR (via Muninn acquisition), SOAR and fleet management — helping lean teams achieve audit readiness, detect advanced threats and scale operations under EU jurisdiction and data law, at predictable node-based cost.</p>
+        </div>
+        <div class="grid-3" style="margin-top:16px;">
+          <div class="col-section">
+            <div class="col-title">Messaging Themes</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-blue"></span>"Sovereign security operations technology" — data stays under EU law</li>
+              <li><span class="bul bul-blue"></span>"We got your six" — ally/partner narrative vs. vendor narrative</li>
+              <li><span class="bul bul-blue"></span>MSSP-first channel motion: scale detection without scaling complexity</li>
+              <li><span class="bul bul-blue"></span>Lean team enablement — deploys with smaller headcounts than US rivals assume</li>
+              <li><span class="bul bul-blue"></span>Node-based pricing — "no ingestion surprises, no year-two reset"</li>
+              <li><span class="bul bul-blue"></span>NIS2 / DORA / GDPR audit readiness as first-class features</li>
+            </ul>
+          </div>
+          <div class="col-section">
+            <div class="col-title">Platform Capabilities</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-green"></span><strong>SIEM</strong> — log collection, correlation, real-time detection</li>
+              <li><span class="bul bul-green"></span><strong>NDR</strong> — AI-driven network detection via Muninn (Oct 2024 acquisition)</li>
+              <li><span class="bul bul-green"></span><strong>SOAR</strong> — automated response orchestration</li>
+              <li><span class="bul bul-green"></span><strong>UEBA</strong> — user and entity behaviour analytics</li>
+              <li><span class="bul bul-green"></span><strong>BCS / SAP Security</strong> — Business-Critical Security for SAP BTP and environments</li>
+              <li><span class="bul bul-green"></span>Fleet management for MSSPs running multi-tenant deployments</li>
+              <li><span class="bul bul-green"></span>On-prem, hybrid, air-gappable, no public cloud dependency</li>
+            </ul>
+          </div>
+          <div class="col-section">
+            <div class="col-title">Key Recent Moves</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-yellow"></span><strong>Mar 2026:</strong> Logpoint → guardsix rebrand; launched Command Centre platform brand</li>
+              <li><span class="bul bul-yellow"></span><strong>May 2026:</strong> SpaceNet partnership — German sovereign managed SIEM</li>
+              <li><span class="bul bul-yellow"></span><strong>Feb 2026:</strong> NXLog technology alliance — EU data sovereignty pipeline</li>
+              <li><span class="bul bul-yellow"></span><strong>Oct 2024:</strong> Acquired Muninn — AI-driven NDR (Danish, MIT-founded)</li>
+              <li><span class="bul bul-yellow"></span><strong>Aug 2025:</strong> Achieved monthly profitability milestone</li>
+              <li><span class="bul bul-yellow"></span><strong>May 2024:</strong> Mikkel Drucker appointed CEO post-Summa acquisition</li>
+            </ul>
+          </div>
+        </div>
+        <div class="grid-3" style="margin-top:20px;">
+          <div class="col-section">
+            <div class="col-title">Strengths</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-green"></span>Only European SIEM with EAL3+ Common Criteria certification</li>
+              <li><span class="bul bul-green"></span>Structural sovereignty advantage: no CLOUD Act / FISA jurisdiction</li>
+              <li><span class="bul bul-green"></span>Node-based pricing vs. ingestion-based — highly differentiated for regulated orgs</li>
+              <li><span class="bul bul-green"></span>SAP security expertise is unique in SIEM market</li>
+              <li><span class="bul bul-green"></span>Strong MSSP channel momentum; multi-tenant fleet management</li>
+              <li><span class="bul bul-green"></span>Profitability achieved — financial stability without growth-at-all-costs pressure</li>
+            </ul>
+          </div>
+          <div class="col-section">
+            <div class="col-title">Weaknesses / Gaps</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-red"></span>Scale gap vs. Splunk/Sentinel in enterprise brand recognition</li>
+              <li><span class="bul bul-red"></span>AI/GenAI messaging underdeveloped vs. Microsoft Copilot for Security</li>
+              <li><span class="bul bul-red"></span>263 employees limits R&D velocity against hyperscaler SIEM teams</li>
+              <li><span class="bul bul-red"></span>Rebrand brand-awareness transition still in early stages</li>
+              <li><span class="bul bul-red"></span>US market presence limited; primarily European-focused</li>
+              <li><span class="bul bul-red"></span>Integration ecosystem narrower than Splunk's 2,800+ app Splunkbase</li>
+            </ul>
+          </div>
+          <div class="col-section">
+            <div class="col-title">Tone &amp; Voice</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-grey"></span>Understated, practitioner-first — speaks to analysts, not boardrooms</li>
+              <li><span class="bul bul-grey"></span>Alliance/partnership language: "got your six," "closest ally"</li>
+              <li><span class="bul bul-grey"></span>Plain-spoken about trade-offs (no marketing inflation of claims)</li>
+              <li><span class="bul bul-grey"></span>Regulatory-fluent: NIS2, DORA, GDPR used as content scaffolding</li>
+              <li><span class="bul bul-grey"></span>Nordic pragmatism: function-first, trust-forward</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPETITOR PROFILES -->
+  <section id="competitors">
+    <div class="section-label">
+      <span class="section-num">03</span>
+      <span class="section-tag">Competitor Profiles</span>
+    </div>
+    <h2>Primary Competitor Landscape</h2>
+
+    <div class="tab-bar">
+      <div class="tab-btn active" onclick="switchTab('splunk')">Splunk / Cisco</div>
+      <div class="tab-btn" onclick="switchTab('sentinel')">Microsoft Sentinel</div>
+      <div class="tab-btn" onclick="switchTab('exabeam')">Exabeam</div>
+      <div class="tab-btn" onclick="switchTab('crowdstrike')">CrowdStrike</div>
+      <div class="tab-btn" onclick="switchTab('ibm')">IBM QRadar</div>
+    </div>
+
+    <!-- SPLUNK -->
+    <div class="tab-panel active" id="panel-splunk">
+      <div class="tab-content">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px;">
+          <div>
+            <h3 style="font-size:18px;margin-bottom:4px;">Splunk Enterprise Security / Cisco</h3>
+            <p style="margin:0;font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--text-muted);">~46% SIEM market share · $28B Cisco acquisition (2024) · Gartner MQ Leader 11 consecutive years</p>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge-chip chip-red">Primary Competitor</span>
+            <span class="badge-chip chip-blue">Enterprise Incumbent</span>
+          </div>
+        </div>
+        <div class="callout blue">
+          <h4>Core Positioning</h4>
+          <p>The market-share leader for enterprise SIEM. Unmatched SPL query power and Splunkbase ecosystem (2,800+ apps). Post-Cisco acquisition, roadmap is stabilising around Cisco security portfolio integration, workload-based pricing, and SIEM + XDR convergence. Appears in 78% of SOC analyst job postings.</p>
+        </div>
+        <div class="grid-3" style="margin-top:16px;">
+          <div class="col-section">
+            <div class="col-title">Messaging Themes</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-purple"></span>Unified security and observability platform</li>
+              <li><span class="bul bul-purple"></span>Splunk ESCU — MITRE ATT&CK aligned detection content library</li>
+              <li><span class="bul bul-purple"></span>AI Assistant for SPL — natural language query layer</li>
+              <li><span class="bul bul-purple"></span>Cisco integration — network telemetry synergy narrative</li>
+              <li><span class="bul bul-purple"></span>Mission Control — unified SOC experience</li>
+            </ul>
+          </div>
+          <div class="col-section">
+            <div class="col-title">Strengths</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-purple"></span>Dominant brand; career-path SIEM for analysts</li>
+              <li><span class="bul bul-purple"></span>SPL: most powerful query language in SIEM market</li>
+              <li><span class="bul bul-purple"></span>Ecosystem depth (2,800+ apps) unmatched</li>
+              <li><span class="bul bul-purple"></span>OT/industrial and US regulated verticals strength</li>
+              <li><span class="bul bul-purple"></span>ESCU detection content breadth</li>
+            </ul>
+          </div>
+          <div class="col-section">
+            <div class="col-title">Vulnerabilities → G6 Exploits</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-green"></span>$150+/GB/day ingestion costs — "bleeds budgets" at scale</li>
+              <li><span class="bul bul-green"></span>Cisco acquisition created roadmap uncertainty and renewal anxiety</li>
+              <li><span class="bul bul-green"></span>US jurisdiction = CLOUD Act / FISA exposure — fatal in EU regulated sectors</li>
+              <li><span class="bul bul-green"></span>On-prem complexity requires 5–7 FTE; not lean-team friendly</li>
+              <li><span class="bul bul-green"></span>SPL learning curve is steep; high switching costs but also high lock-in pain</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SENTINEL -->
+    <div class="tab-panel" id="panel-sentinel">
+      <div class="tab-content">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px;">
+          <div>
+            <h3 style="font-size:18px;margin-bottom:4px;">Microsoft Sentinel</h3>
+            <p style="margin:0;font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--text-muted);">~15% SIEM market share · Cloud-native · Copilot for Security integration · Azure-native</p>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge-chip chip-red">AI Threat — Most Serious</span>
+            <span class="badge-chip chip-blue">Cloud-Native Leader</span>
+          </div>
+        </div>
+        <div class="callout blue">
+          <h4>Core Positioning</h4>
+          <p>Cloud-native SIEM with structural cost advantage for Microsoft-centric environments (M365, Azure, Entra ID ingested free or near-free). Copilot for Security brings natural-language threat hunting to production — the most mature AI investigation capability in any SIEM today. Fastest growing platform in the category.</p>
+        </div>
+        <div class="grid-3" style="margin-top:16px;">
+          <div class="col-section">
+            <div class="col-title">Messaging Themes</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-blue"></span>Copilot for Security: "English-language threat hunting"</li>
+              <li><span class="bul bul-blue"></span>Unified XDR + SIEM in Microsoft Defender ecosystem</li>
+              <li><span class="bul bul-blue"></span>Zero-cost ingestion for Microsoft data sources</li>
+              <li><span class="bul bul-blue"></span>OCSF schema alignment; detection portability</li>
+              <li><span class="bul bul-blue"></span>AI-automated incident summaries and investigation graphs</li>
+            </ul>
+          </div>
+          <div class="col-section">
+            <div class="col-title">Strengths</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-blue"></span>Most mature GenAI SIEM in market (Copilot for Security)</li>
+              <li><span class="bul bul-blue"></span>Free/near-free ingestion for M365/Azure ecosystem</li>
+              <li><span class="bul bul-blue"></span>Fastest deployment for Azure-native orgs (2–4 weeks)</li>
+              <li><span class="bul bul-blue"></span>Unlimited AI compute backing from Azure infrastructure</li>
+              <li><span class="bul bul-blue"></span>SOAR built-in; no separate licensing</li>
+            </ul>
+          </div>
+          <div class="col-section">
+            <div class="col-title">Vulnerabilities → G6 Exploits</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-green"></span>US jurisdiction: Azure subject to CLOUD Act — EU data residency concerns persist even with EU Data Boundary commitments</li>
+              <li><span class="bul bul-green"></span>Non-Microsoft environments: third-party connector quality varies widely</li>
+              <li><span class="bul bul-green"></span>Ingestion cost spikes unpredictably at &gt;500GB/day from diverse sources</li>
+              <li><span class="bul bul-green"></span>OT/ICS environments unsupported; hybrid on-prem weak</li>
+              <li><span class="bul bul-green"></span>No air-gap deployment option — disqualified for classified/CNI contexts</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXABEAM -->
+    <div class="tab-panel" id="panel-exabeam">
+      <div class="tab-content">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px;">
+          <div>
+            <h3 style="font-size:18px;margin-bottom:4px;">Exabeam</h3>
+            <p style="margin:0;font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--text-muted);">Gartner MQ Leader 6 consecutive years · UEBA specialist · US-based · Private</p>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge-chip chip-orange">Mid-Market Rival</span>
+            <span class="badge-chip chip-blue">UEBA Specialist</span>
+          </div>
+        </div>
+        <div class="callout blue">
+          <h4>Core Positioning</h4>
+          <p>Behavioural analytics-first SIEM. UEBA is its foundational differentiator — anomaly detection over any data it receives. Cloud-native but moving to hybrid. Closest size competitor to Guardsix in SIEM market; both serve mid-market security teams. US-headquartered — same CLOUD Act exposure as Microsoft.</p>
+        </div>
+        <div class="grid-3" style="margin-top:16px;">
+          <div class="col-section">
+            <div class="col-title">Messaging Themes</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-yellow"></span>Behavioural baselines and anomaly detection as primary value</li>
+              <li><span class="bul bul-yellow"></span>Exabeam Fusion: SIEM + UEBA + SOAR unified</li>
+              <li><span class="bul bul-yellow"></span>Reduces alert fatigue through smart timelines</li>
+              <li><span class="bul bul-yellow"></span>Analyst productivity through AI-enriched investigation</li>
+            </ul>
+          </div>
+          <div class="col-section">
+            <div class="col-title">Strengths</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-yellow"></span>Best-in-class UEBA and smart timelines for insider threat</li>
+              <li><span class="bul bul-yellow"></span>Gartner Leader recognition reinforces enterprise credibility</li>
+              <li><span class="bul bul-yellow"></span>UEBA differentiation is narrowing vs. competitors adopting similar capabilities</li>
+            </ul>
+          </div>
+          <div class="col-section">
+            <div class="col-title">Vulnerabilities → G6 Exploits</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-green"></span>US-HQ = no EU sovereignty claim; same CLOUD Act exposure</li>
+              <li><span class="bul bul-green"></span>UEBA advantage narrowing as Sentinel and CrowdStrike build similar capabilities</li>
+              <li><span class="bul bul-green"></span>No NDR capability (G6 has Muninn-powered NDR)</li>
+              <li><span class="bul bul-green"></span>No SAP security specialisation</li>
+              <li><span class="bul bul-green"></span>Less MSSP-optimised than guardsix fleet management</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CROWDSTRIKE -->
+    <div class="tab-panel" id="panel-crowdstrike">
+      <div class="tab-content">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px;">
+          <div>
+            <h3 style="font-size:18px;margin-bottom:4px;">CrowdStrike Falcon Next-Gen SIEM</h3>
+            <p style="margin:0;font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--text-muted);">LogScale-powered · Index-free architecture · Charlotte AI · Gartner Visionary first year</p>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge-chip chip-red">AI/Speed Threat</span>
+            <span class="badge-chip chip-blue">Endpoint-Anchored</span>
+          </div>
+        </div>
+        <div class="callout blue">
+          <h4>Core Positioning</h4>
+          <p>Endpoint-native SIEM built on LogScale's index-free architecture — 10–30x compression vs. traditional SIEMs. Charlotte AI provides natural-language investigation ("Show me every endpoint communicating with this IP in 30 days" answered in seconds). Free Falcon endpoint telemetry ingestion creates compelling economics for CrowdStrike EDR shops.</p>
+        </div>
+        <div class="grid-3" style="margin-top:16px;">
+          <div class="col-section">
+            <div class="col-title">Messaging Themes</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-red"></span>Index-free: 10–30x compression, sub-second queries</li>
+              <li><span class="bul bul-red"></span>Charlotte AI: fastest AI investigation in SIEM category</li>
+              <li><span class="bul bul-red"></span>Free Falcon telemetry ingestion; cost-efficient for CrowdStrike shops</li>
+              <li><span class="bul bul-red"></span>Petabyte-scale without performance degradation</li>
+            </ul>
+          </div>
+          <div class="col-section">
+            <div class="col-title">Strengths</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-red"></span>Best compression architecture in market</li>
+              <li><span class="bul bul-red"></span>Best AI investigation speed for Falcon-centric orgs</li>
+              <li><span class="bul bul-red"></span>Strong US enterprise and cloud-native orgs</li>
+              <li><span class="bul bul-red"></span>EY selected for global managed cybersecurity (2025)</li>
+            </ul>
+          </div>
+          <div class="col-section">
+            <div class="col-title">Vulnerabilities → G6 Exploits</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-green"></span>Value caps at CrowdStrike ecosystem boundary — non-Falcon environments see limited benefit</li>
+              <li><span class="bul bul-green"></span>US jurisdiction — CLOUD Act exposure in European regulated sectors</li>
+              <li><span class="bul bul-green"></span>No OT/ICS depth; no SAP security coverage</li>
+              <li><span class="bul bul-green"></span>No on-prem / air-gap deployment option</li>
+              <li><span class="bul bul-green"></span>SIEM brand still new vs. incumbent Splunk/Sentinel recognition</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IBM -->
+    <div class="tab-panel" id="panel-ibm">
+      <div class="tab-content">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px;">
+          <div>
+            <h3 style="font-size:18px;margin-bottom:4px;">IBM QRadar</h3>
+            <p style="margin:0;font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--text-muted);">$10K/yr starting · EPS-based pricing · Healthcare + financial services · XDR pivot</p>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge-chip chip-blue">Compliance Incumbent</span>
+            <span class="badge-chip chip-orange">Repositioning</span>
+          </div>
+        </div>
+        <div class="callout blue">
+          <h4>Core Positioning</h4>
+          <p>The compliance-heritage SIEM. QRadar's EPS-based predictable pricing, out-of-the-box compliance reporting (PCI, SOX, HIPAA), and stability made it the default for healthcare, financial services, and government for over a decade. IBM is now repositioning QRadar within a broader XDR strategy, adding endpoint and cloud detection depth.</p>
+        </div>
+        <div class="grid-3" style="margin-top:16px;">
+          <div class="col-section">
+            <div class="col-title">Messaging Themes</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-blue"></span>EPS-based predictable pricing vs. volume pricing peers</li>
+              <li><span class="bul bul-blue"></span>Out-of-the-box compliance templates (PCI, SOX, HIPAA)</li>
+              <li><span class="bul bul-blue"></span>XDR pivot: endpoint + network + cloud detection</li>
+              <li><span class="bul bul-blue"></span>IBM threat intelligence integration</li>
+            </ul>
+          </div>
+          <div class="col-section">
+            <div class="col-title">Strengths</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-blue"></span>Stable, well-understood by compliance and audit teams</li>
+              <li><span class="bul bul-blue"></span>Predictable EPS pricing suits budget-constrained orgs</li>
+              <li><span class="bul bul-blue"></span>Deep US regulated industry relationships</li>
+              <li><span class="bul bul-blue"></span>IBM brand credibility in enterprise procurement</li>
+            </ul>
+          </div>
+          <div class="col-section">
+            <div class="col-title">Vulnerabilities → G6 Exploits</div>
+            <ul class="bullet-list">
+              <li><span class="bul bul-green"></span>Legacy architecture perceived as slower to innovate vs. cloud-native peers</li>
+              <li><span class="bul bul-green"></span>XDR pivot creates messaging confusion vs. established identity</li>
+              <li><span class="bul bul-green"></span>US jurisdiction — same CLOUD Act concerns in EU market</li>
+              <li><span class="bul bul-green"></span>AI investigation capabilities behind Copilot for Security and Charlotte AI</li>
+              <li><span class="bul bul-green"></span>No NDR native capability comparable to Muninn-powered G6</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MATRIX -->
+  <section id="matrix">
+    <div class="section-label">
+      <span class="section-num">04</span>
+      <span class="section-tag">Comparison Matrix</span>
+    </div>
+    <h2>Head-to-Head: Guardsix vs. Primary SIEM Competitors</h2>
+    <div class="matrix-wrap">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th class="hi-col">Guardsix (g6)</th>
+            <th>Splunk / Cisco</th>
+            <th>MS Sentinel</th>
+            <th>Exabeam</th>
+            <th>CrowdStrike</th>
+            <th>IBM QRadar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Target Buyer</td>
+            <td class="hi-col">MSSPs + EU regulated orgs; lean SOC teams; CNI operators</td>
+            <td>Enterprise SOC; complex, high-volume orgs</td>
+            <td>Azure-centric enterprise; M365 shops</td>
+            <td>Mid-market; insider threat focus</td>
+            <td>CrowdStrike EDR shops; cloud-native enterprise</td>
+            <td>Healthcare, financial services, government</td>
+          </tr>
+          <tr>
+            <td>European Sovereignty</td>
+            <td class="hi-col"><span class="check">✓✓</span> Only European vendor; EAL3+; no CLOUD Act</td>
+            <td><span class="cross">✗</span> US jurisdiction; CLOUD Act applies</td>
+            <td><span class="partial">~</span> EU Data Boundary; Azure still US-controlled</td>
+            <td><span class="cross">✗</span> US jurisdiction</td>
+            <td><span class="cross">✗</span> US jurisdiction</td>
+            <td><span class="cross">✗</span> US jurisdiction</td>
+          </tr>
+          <tr>
+            <td>AI Capabilities</td>
+            <td class="hi-col">Muninn AI NDR; UEBA — credible, needs external amplification</td>
+            <td>AI Assistant for SPL; Charlotte AI (CrowdStrike)</td>
+            <td><span class="check">✓✓</span> Copilot for Security — market-leading GenAI SIEM</td>
+            <td>Smart Timelines + UEBA; solid but narrowing differentiation</td>
+            <td><span class="check">✓✓</span> Charlotte AI — fastest natural language investigation</td>
+            <td>IBM AI; improving but lags Copilot / Charlotte</td>
+          </tr>
+          <tr>
+            <td>Pricing Model</td>
+            <td class="hi-col"><span class="check">✓</span> Node-based — predictable, no ingestion surprises</td>
+            <td>Workload-based; historically $150+/GB — expensive at scale</td>
+            <td>Per-GB consumption; unpredictable at high volumes</td>
+            <td>Subscription + consumption mix</td>
+            <td>Free Falcon telemetry; per-GB for 3rd-party</td>
+            <td><span class="check">✓</span> EPS-based — predictable for compliance orgs</td>
+          </tr>
+          <tr>
+            <td>On-Prem / Air-Gap</td>
+            <td class="hi-col"><span class="check">✓✓</span> Self-hosted, air-gappable, hybrid, on-prem</td>
+            <td><span class="partial">~</span> On-prem possible but complex; moving cloud-first</td>
+            <td><span class="cross">✗</span> Cloud-only; no on-prem option</td>
+            <td><span class="partial">~</span> Hybrid available but cloud-first</td>
+            <td><span class="cross">✗</span> Cloud-only</td>
+            <td><span class="partial">~</span> On-prem available; ageing architecture</td>
+          </tr>
+          <tr>
+            <td>NIS2 / DORA Readiness</td>
+            <td class="hi-col"><span class="check">✓✓</span> Built-in audit content packs; marketed as first-class features</td>
+            <td>Available via content packs; not core messaging</td>
+            <td>Compliance templates available; EU data residency partial</td>
+            <td>Some compliance content; not EU-regulatory focused</td>
+            <td>Minimal NIS2/DORA positioning</td>
+            <td>Strong compliance (PCI, SOX, HIPAA); less EU-regulatory focus</td>
+          </tr>
+          <tr>
+            <td>SAP Security</td>
+            <td class="hi-col"><span class="check">✓</span> BCS for SAP BTP — unique capability in SIEM category</td>
+            <td>Available via ecosystem apps; not native</td>
+            <td>Third-party connectors; not specialised</td>
+            <td><span class="cross">✗</span> No SAP-specific offering</td>
+            <td><span class="cross">✗</span> No SAP-specific offering</td>
+            <td>Some SAP integration; not a headline capability</td>
+          </tr>
+          <tr>
+            <td>NDR Integration</td>
+            <td class="hi-col"><span class="check">✓</span> Muninn AI-NDR — native, AI-driven, from Danish MIT startup</td>
+            <td>Available via partner integrations</td>
+            <td>Microsoft Defender NDR integration</td>
+            <td><span class="cross">✗</span> No native NDR</td>
+            <td>Network detection via Falcon; strong in Falcon env</td>
+            <td>IBM QRadar NDR available as separate product</td>
+          </tr>
+          <tr>
+            <td>MSSP Suitability</td>
+            <td class="hi-col"><span class="check">✓✓</span> Fleet management, multi-tenant, MSSP-first channel motion</td>
+            <td>MSSP capable but complex licensing</td>
+            <td>Azure Lighthouse for multi-tenant; improving</td>
+            <td>MSSP tier available</td>
+            <td>Emerging MSSP programme</td>
+            <td>MSSP capable; IBM-heavy commercial model</td>
+          </tr>
+          <tr>
+            <td>Integration Ecosystem</td>
+            <td class="hi-col">Growing; broader than Exabeam but far behind Splunkbase</td>
+            <td><span class="check">✓✓</span> 2,800+ Splunkbase apps — unmatched</td>
+            <td>Strong for Microsoft stack; inconsistent 3rd-party</td>
+            <td>Good but limited vs. Splunk</td>
+            <td>Best within Falcon ecosystem; limited outside</td>
+            <td>Wide enterprise integrations; ageing architecture</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- POSITIONING MAP -->
+  <section id="posmap">
+    <div class="section-label">
+      <span class="section-num">05</span>
+      <span class="section-tag">Strategic Positioning</span>
+    </div>
+    <h2>Positioning Map — Sovereignty vs. AI-Feature Modernity</h2>
+    <div class="card">
+      <div class="card-body">
+        <!-- Outer wrapper gives room for rotated y-axis label -->
+        <div style="display:flex;align-items:stretch;gap:0;margin-bottom:16px;">
+          <!-- Y-axis label: fixed-width column, vertically centred -->
+          <div style="width:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+            <span style="display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;transform:rotate(-90deg);transform-origin:center center;">European Sovereignty ↑ &nbsp;|&nbsp; US-Jurisdictioned ↓</span>
+          </div>
+          <!-- Map canvas -->
+          <div style="flex:1;min-width:0;">
+            <div class="pos-canvas">
+              <div class="pos-grid"></div>
+              <div class="pos-center-h"></div>
+              <div class="pos-center-v"></div>
+
+              <!-- Guardsix: high sovereignty, mid AI -->
+              <div class="pos-dot g6" style="left:18%;bottom:72%;" title="guardsix">g6</div>
+              <!-- Splunk: mid sovereignty (declining), high AI -->
+              <div class="pos-dot splunk" style="left:58%;bottom:55%;" title="Splunk">SPL</div>
+              <!-- Sentinel: low sovereignty (US), very high AI -->
+              <div class="pos-dot sentinel" style="left:80%;bottom:30%;" title="Microsoft Sentinel">SEN</div>
+              <!-- Exabeam: low sovereignty, mid-high AI -->
+              <div class="pos-dot exabeam" style="left:62%;bottom:48%;" title="Exabeam">EXA</div>
+              <!-- CrowdStrike: low sovereignty, high AI -->
+              <div class="pos-dot crow" style="left:76%;bottom:55%;" title="CrowdStrike">CS</div>
+              <!-- IBM: low sovereignty, mid AI -->
+              <div class="pos-dot ibm" style="left:54%;bottom:38%;" title="IBM QRadar">IBM</div>
+
+              <div class="axis-label" style="bottom:-22px;right:0;">→ AI Feature Modernity</div>
+              <div class="axis-label" style="bottom:-22px;left:0;">← Commodity / Legacy</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="legend-row">
+          <div class="leg-item"><div class="leg-dot" style="background:var(--accent);border:2px solid var(--accent)"></div>guardsix (g6)</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#6b4fa3"></div>Splunk/Cisco (SPL)</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#2a7a60"></div>MS Sentinel (SEN)</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#8a5010"></div>Exabeam (EXA)</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#8a2020"></div>CrowdStrike (CS)</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#205090"></div>IBM QRadar (IBM)</div>
+        </div>
+        <p style="font-size:11px;color:var(--text-muted);margin-top:12px;margin-bottom:0;">Guardsix occupies a unique position: highest European sovereignty in the category, with credible (and growing) AI capability. No other vendor in the top tier can claim both. The strategic play is to hold the upper-left quadrant exclusively while incrementally moving right on AI modernity.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENT GAPS -->
+  <section id="gaps">
+    <div class="section-label">
+      <span class="section-num">06</span>
+      <span class="section-tag">Content Gap Analysis</span>
+    </div>
+    <h2>Content Gaps — Where Guardsix Can Own Narrative</h2>
+    <div class="grid-2">
+      <div>
+        <div class="callout green">
+          <h4>Topics Guardsix Can Own (Competitors Cannot)</h4>
+        </div>
+        <ul class="bullet-list">
+          <li><span class="bul bul-green"></span><strong>"European SIEM Buyer's Guide 2026"</strong> — No US vendor will produce an honest assessment of CLOUD Act implications for EU buyers. Guardsix can own this with authority and no conflict of interest.</li>
+          <li><span class="bul bul-green"></span><strong>NIS2 & DORA compliance content</strong> — educational content series (checklist, audit-readiness guide, what-to-log templates) tied directly to Guardsix's built-in compliance content packs.</li>
+          <li><span class="bul bul-green"></span><strong>SAP Security for SecOps teams</strong> — unique in the SIEM category; no competitor has built-in SAP BTP threat detection. Educational content here is rare and high-value.</li>
+          <li><span class="bul bul-green"></span><strong>MSSP economics of SIEM</strong> — node-based vs. ingestion-based pricing comparisons. Any honest analysis strongly favours G6 for multi-tenant MSSP operations; G6 should produce it.</li>
+          <li><span class="bul bul-green"></span><strong>"Lean SOC playbook"</strong> — content for 2–5 person security teams who cannot staff 7 FTEs; this is guardsix's core buyer, largely ignored by hyperscaler content.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="callout red">
+          <h4>Gaps vs. Competitors (Needs Investment)</h4>
+        </div>
+        <ul class="bullet-list">
+          <li><span class="bul bul-red"></span><strong>GenAI/AI capability messaging</strong> — Sentinel's Copilot for Security and CrowdStrike's Charlotte AI are winning AI narrative. Guardsix needs a dedicated "AI in Command Centre" narrative that tells the Muninn NDR + UEBA + detection AI story in accessible, use-case language.</li>
+          <li><span class="bul bul-red"></span><strong>Analyst/research recognition</strong> — Exabeam and Splunk feature prominently in Gartner MQ. Guardsix needs a systematic Gartner, Forrester, and IDC briefing programme for its sovereign SecOps positioning.</li>
+          <li><span class="bul bul-red"></span><strong>Use-case / customer evidence</strong> — website content and case study volume is thin vs. Splunk and Sentinel. Regulated industry customer stories (energy, healthcare, public sector) would directly address the ICP.</li>
+          <li><span class="bul bul-red"></span><strong>Technical differentiation content</strong> — comprehensive comparison of on-prem vs. cloud SIEM total cost of ownership (including hidden FTE costs, ingestion spikes, compliance audit costs) would be a high-value, shareable asset.</li>
+          <li><span class="bul bul-red"></span><strong>Rebrand transition content</strong> — the March 2026 rebrand creates a window to produce a high-profile "why we became guardsix" editorial content series building the sovereign narrative at a moment of maximum press attention.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPPORTUNITIES & THREATS -->
+  <section id="opp">
+    <div class="section-label">
+      <span class="section-num">07</span>
+      <span class="section-tag">Strategic Assessment</span>
+    </div>
+    <h2>Opportunities to Exploit — Threats to Defend</h2>
+    <div class="ot-grid">
+      <div>
+        <h3 style="color:var(--accent2);margin-bottom:16px;">// Opportunities</h3>
+        <div class="ot-item">
+          <span class="ot-num opp">O1</span>
+          <div class="ot-body">
+            <h4>NIS2 / DORA Enforcement as a Structural Tailwind</h4>
+            <p>With NIS2 enforcement from Oct 2024 and DORA from Jan 2025, European regulated orgs face real audit liability. Guardsix's built-in compliance packs and EU jurisdiction make it a structurally superior choice — not just a marketing claim. This window widens as enforcement intensifies.</p>
+          </div>
+        </div>
+        <div class="ot-item">
+          <span class="ot-num opp">O2</span>
+          <div class="ot-body">
+            <h4>Cisco / Splunk Renewal Anxiety Creates Switching Momentum</h4>
+            <p>Cisco's Splunk acquisition has created roadmap uncertainty in the EU market. European orgs on Splunk mid-renewal are actively evaluating alternatives — and US-sovereignty concern now adds a compliance vector to the cost argument already in guardsix's favour.</p>
+          </div>
+        </div>
+        <div class="ot-item">
+          <span class="ot-num opp">O3</span>
+          <div class="ot-body">
+            <h4>MSSP Channel Is a Revenue Multiplier</h4>
+            <p>Each MSSP that standardises on Command Centre multiplies G6's revenue across the MSSP's own customer base. The fleet management capability is differentiated; building a structured MSSP partner programme with co-sell materials, joint case studies, and dedicated engineering support should be a priority investment.</p>
+          </div>
+        </div>
+        <div class="ot-item">
+          <span class="ot-num opp">O4</span>
+          <div class="ot-body">
+            <h4>Critical National Infrastructure (CNI) as a Defensible Niche</h4>
+            <p>Energy, healthcare, water, transport — all NIS2-in-scope CNI operators — require on-prem or air-gapped SIEM that no US hyperscaler can deliver. Guardsix's air-gap deployability is a disqualifier for competitors and a non-negotiable requirement for this segment.</p>
+          </div>
+        </div>
+        <div class="ot-item">
+          <span class="ot-num opp">O5</span>
+          <div class="ot-body">
+            <h4>Muninn NDR is an Underleveraged Asset</h4>
+            <p>Integrated SIEM + NDR is rare; Gartner notes 50% faster incident response for orgs combining both. Guardsix's Muninn acquisition (Oct 2024) gives it a native AI-driven NDR no competitor can match without a separate product stack. This needs dedicated go-to-market.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="color:var(--threat);margin-bottom:16px;">// Threats</h3>
+        <div class="ot-item">
+          <span class="ot-num thr">T1</span>
+          <div class="ot-body">
+            <h4>Microsoft Copilot for Security Raises AI Baseline for All Buyers</h4>
+            <p>Copilot for Security is the most mature analyst-facing AI in SIEM today. Every SIEM evaluation will now include an AI capability benchmark. Guardsix must sharpen its AI narrative (Muninn + UEBA + detection automation) or risk being excluded from AI-centric shortlists by buyers who haven't yet prioritised sovereignty.</p>
+          </div>
+        </div>
+        <div class="ot-item">
+          <span class="ot-num thr">T2</span>
+          <div class="ot-body">
+            <h4>Rebrand Creates a Temporary Awareness Gap</h4>
+            <p>The Logpoint → guardsix transition means existing brand equity (Gartner reviews, analyst reports, partner portals) still reads "Logpoint." Buyers who search "guardsix" post-March 2026 may find thin results vs. searching "Logpoint." A structured rebrand SEO and awareness campaign is urgent.</p>
+          </div>
+        </div>
+        <div class="ot-item">
+          <span class="ot-num thr">T3</span>
+          <div class="ot-body">
+            <h4>Hyperscaler "EU Data Boundary" Commitments May Erode Sovereignty Narrative</h4>
+            <p>Microsoft's EU Data Boundary and Azure EU regions are reducing (though not eliminating) the sovereignty gap vs. Sentinel. If EU regulatory guidance softens on CLOUD Act risk, the structural differentiation weakens. Guardsix must deepen its EAL3+ and air-gap story beyond data residency alone.</p>
+          </div>
+        </div>
+        <div class="ot-item">
+          <span class="ot-num thr">T4</span>
+          <div class="ot-body">
+            <h4>Scale Limitations Constrain Enterprise Velocity</h4>
+            <p>At 263 employees vs. Microsoft/CrowdStrike/Splunk teams 100x larger, guardsix's R&D velocity, enterprise field presence, and integration partner investment are structurally constrained. Summa Equity's backing helps, but product gaps will widen if AI investment tempo isn't matched.</p>
+          </div>
+        </div>
+        <div class="ot-item">
+          <span class="ot-num thr">T5</span>
+          <div class="ot-body">
+            <h4>SIEM + XDR Consolidation Pressure May Reframe Buying Category</h4>
+            <p>CrowdStrike, Palo Alto (XSIAM), and Microsoft are converging SIEM, XDR, and EDR into platform suites. If the category shifts from "SIEM + NDR" to "XDR platform," guardsix's stand-alone positioning requires a rapid narrative adjustment to stay in enterprise shortlists.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECOMMENDED ACTIONS -->
+  <section id="actions">
+    <div class="section-label">
+      <span class="section-num">08</span>
+      <span class="section-tag">Recommended Actions</span>
+    </div>
+    <h2>Recommended Actions — Marketing, CI &amp; Product</h2>
+    <div class="rec-grid">
+      <div class="rec-card">
+        <div class="rec-head quick">⚡ Quick Win → See §09</div>
+        <div class="rec-body">
+          <h4>Produce "European SIEM Buyer's Guide 2026"</h4>
+          <p>Full outline, section structure, messaging angles, and SEO strategy developed in <a href="#buyers-guide" style="color:var(--accent);">Section 09 ↓</a>. Only guardsix can publish this without conflict of interest — high RFP-influence and analyst citation value.</p>
+        </div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-head quick">⚡ Quick Win</div>
+        <div class="rec-body">
+          <h4>Rebrand SEO + Analyst Awareness Sprint</h4>
+          <p>301 redirects, cross-reference "formerly Logpoint" in all guardsix content, update Gartner Peer Insights, G2, Capterra profiles urgently. Brief Forrester and IDC on the sovereign SecOps positioning with new analyst deck. Window is 90 days post-rebrand.</p>
+        </div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-head quick">⚡ Quick Win</div>
+        <div class="rec-body">
+          <h4>Launch "Lean SOC" Content Series</h4>
+          <p>Blog, webinar, and short-form video series specifically for 2–5 person SOC teams and MSSP analysts — guardsix's actual buyer. Competitors speak to 50-analyst enterprise SOCs. This audience is underserved and the content would directly amplify the rebrand messaging.</p>
+        </div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-head strategic">🎯 Strategic</div>
+        <div class="rec-body">
+          <h4>Build a Dedicated Muninn NDR Go-to-Market</h4>
+          <p>Integrated SIEM + NDR is a material capability gap for Exabeam and IBM. Create dedicated Muninn NDR landing page, demo environment, and case studies for the SIEM+NDR combined story — positioned against the "single pane of glass" promise competitors cannot deliver.</p>
+        </div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-head strategic">🎯 Strategic</div>
+        <div class="rec-body">
+          <h4>Sharpen AI Narrative Before Evaluations Ask for It</h4>
+          <p>Develop a concrete "AI in Command Centre" narrative: what the Muninn AI detects, what UEBA baselines, what SOAR automates — with benchmark data. Counter Copilot for Security comparisons with on-prem AI advantage claims (no cloud latency, data stays local, reproducible detection).</p>
+        </div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-head defensive">🛡 Defensive → See §10</div>
+        <div class="rec-body">
+          <h4>Prepare Splunk Displacement Playbook</h4>
+          <p>Full battlecard, objection-handling scripts, migration messaging, and channel activation plan developed in <a href="#splunk-playbook" style="color:var(--accent3);">Section 10 ↓</a>. Primary activation markets: Germany, Netherlands, France.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- §09 EUROPEAN SIEM BUYER'S GUIDE -->
+  <section id="buyers-guide">
+    <div class="section-label">
+      <span class="section-num">09</span>
+      <span class="section-tag">Integrated Asset — Quick Win</span>
+    </div>
+    <h2>European SIEM Buyer's Guide 2026 — Full Outline &amp; Messaging Strategy</h2>
+
+    <div class="callout blue">
+      <h4>Strategic Rationale</h4>
+      <p>No US vendor will write an honest, unbiased SIEM buyer's guide that prominently features CLOUD Act risk, NIS2 compliance gaps in hyperscaler platforms, or the case for on-prem deployability. Guardsix can — and should. This asset doubles as an inbound SEO magnet, an RFP-attachment document, and an analyst briefing leave-behind. It is the single highest-leverage content investment available post-rebrand.</p>
+    </div>
+
+    <div class="grid-2" style="margin-top:20px;margin-bottom:20px;">
+      <div>
+        <div class="col-title">Target Audience</div>
+        <ul class="bullet-list">
+          <li><span class="bul bul-blue"></span><strong>CISOs and security architects</strong> at European regulated organisations (energy, healthcare, finance, public sector) evaluating or re-evaluating their SIEM in the post-NIS2 / post-DORA environment</li>
+          <li><span class="bul bul-blue"></span><strong>MSSP technical and commercial leads</strong> building or expanding managed SIEM service offerings for EU clients</li>
+          <li><span class="bul bul-blue"></span><strong>Procurement and compliance leads</strong> who need to justify SIEM vendor choice to a DPO, auditor, or board against NIS2 Article 21 obligations</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-title">Distribution &amp; Activation Plan</div>
+        <ul class="bullet-list">
+          <li><span class="bul bul-green"></span><strong>Ungated PDF + gated download</strong> — ungated for analyst/press citation; gated for lead gen</li>
+          <li><span class="bul bul-green"></span>Submit to Gartner Peer Insights, ISC2, ENISA resource libraries</li>
+          <li><span class="bul bul-green"></span>Syndicate to partner MSSPs as co-branded version</li>
+          <li><span class="bul bul-green"></span>LinkedIn long-form post series drawing out each chapter</li>
+          <li><span class="bul bul-green"></span>Email sequence to existing trial/POC pipeline referencing relevant chapters</li>
+          <li><span class="bul bul-green"></span>Include as RFP attachment with cover note from CEO</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-title" style="margin-bottom:14px;">Proposed Document Structure</div>
+
+    <div class="grid-2">
+
+      <div class="card">
+        <div class="card-header" style="background:rgba(88,166,255,0.06);">
+          <div class="card-header-left"><h3 style="font-size:13px;">Ch. 1 — The 2026 SIEM Buying Environment</h3></div>
+          <span class="badge-chip chip-blue">Context-setter</span>
+        </div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><span class="bul bul-blue"></span>How the category changed: SIEM → SIEM+NDR+SOAR convergence</li>
+            <li><span class="bul bul-blue"></span>The Cisco/Splunk acquisition effect on renewal decisions</li>
+            <li><span class="bul bul-blue"></span>Why AI features are now table-stakes — and what that means for evaluation</li>
+            <li><span class="bul bul-blue"></span>The hidden cost equation: platform licence vs. FTE vs. storage vs. compliance audit</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header" style="background:rgba(88,166,255,0.06);">
+          <div class="card-header-left"><h3 style="font-size:13px;">Ch. 2 — The Sovereignty Imperative</h3></div>
+          <span class="badge-chip chip-green">Core differentiator chapter</span>
+        </div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><span class="bul bul-green"></span>What the CLOUD Act actually means for European security data</li>
+            <li><span class="bul bul-green"></span>Why "EU Data Boundary" commitments from Microsoft/AWS do not fully resolve CLOUD Act risk</li>
+            <li><span class="bul bul-green"></span>NIS2 Article 21 obligations and what your SIEM vendor must support</li>
+            <li><span class="bul bul-green"></span>DORA Article 30 ICT third-party risk: how vendor jurisdiction affects audit readiness</li>
+            <li><span class="bul bul-green"></span>EAL3+ Common Criteria: what it means and why it matters for procurement</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header" style="background:rgba(88,166,255,0.06);">
+          <div class="card-header-left"><h3 style="font-size:13px;">Ch. 3 — Deployment Architecture Decisions</h3></div>
+          <span class="badge-chip chip-blue">Technical</span>
+        </div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><span class="bul bul-blue"></span>Cloud-native vs. hybrid vs. on-prem vs. air-gap: decision matrix by sector</li>
+            <li><span class="bul bul-blue"></span>OT/ICS environments: why cloud-native SIEM fails at the network edge</li>
+            <li><span class="bul bul-blue"></span>True TCO model: ingestion-based vs. node-based pricing — 3-year cost comparison with worked example</li>
+            <li><span class="bul bul-blue"></span>Staffing reality: what headcount assumptions each architecture requires</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header" style="background:rgba(88,166,255,0.06);">
+          <div class="card-header-left"><h3 style="font-size:13px;">Ch. 4 — Evaluating AI &amp; Detection Capability</h3></div>
+          <span class="badge-chip chip-blue">Technical</span>
+        </div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><span class="bul bul-blue"></span>What "AI-powered SIEM" actually means vs. marketing — a plain-language taxonomy</li>
+            <li><span class="bul bul-blue"></span>UEBA, NDR, GenAI investigation, SOAR automation — what each adds to detection quality</li>
+            <li><span class="bul bul-blue"></span>On-prem AI vs. cloud AI: latency, data sovereignty, model reproducibility trade-offs</li>
+            <li><span class="bul bul-blue"></span>Detection content quality: MITRE ATT&amp;CK coverage, false-positive rates, tuning burden</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header" style="background:rgba(88,166,255,0.06);">
+          <div class="card-header-left"><h3 style="font-size:13px;">Ch. 5 — Compliance &amp; Audit Readiness</h3></div>
+          <span class="badge-chip chip-green">High-value for ICP</span>
+        </div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><span class="bul bul-green"></span>What NIS2 requires you to log, detect, and report — and how your SIEM maps to each obligation</li>
+            <li><span class="bul bul-green"></span>DORA ICT incident classification and reporting: what your SIEM must provide</li>
+            <li><span class="bul bul-green"></span>GDPR Article 32: technical and organisational security measures — SIEM as evidence</li>
+            <li><span class="bul bul-green"></span>Audit readiness checklist: what your auditor will ask and what your SIEM should generate</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header" style="background:rgba(88,166,255,0.06);">
+          <div class="card-header-left"><h3 style="font-size:13px;">Ch. 6 — Vendor Shortlist Evaluation Framework</h3></div>
+          <span class="badge-chip chip-yellow">Decision tool</span>
+        </div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><span class="bul bul-yellow"></span>10-criteria evaluation scorecard with weighting guidance by sector (healthcare / energy / finance)</li>
+            <li><span class="bul bul-yellow"></span>10 questions every European organisation should ask any SIEM vendor</li>
+            <li><span class="bul bul-yellow"></span>POC checklist: what to test in a 30-day proof of concept</li>
+            <li><span class="bul bul-yellow"></span>Contract red flags: clauses to watch for in SIEM vendor agreements re. data jurisdiction</li>
+          </ul>
+          <div class="callout green" style="margin-top:12px;margin-bottom:0;">
+            <h4>Guardsix Positioning Note</h4>
+            <p>The evaluation scorecard should be designed so that sovereignty requirements, on-prem deployability, and node-based pricing are all prominent weighted criteria — areas where guardsix scores highest. This is honest framing, not manipulation: these are real requirements for the ICP.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout yellow" style="margin-top:20px;">
+      <h4>SEO Keyword Targets for the Guide</h4>
+      <p>Primary: "European SIEM 2026", "NIS2 SIEM requirements", "DORA SIEM compliance", "CLOUD Act SIEM risk", "sovereign SIEM Europe" · Secondary: "on-premise SIEM NIS2", "SIEM for critical infrastructure EU", "MSSP SIEM platform Europe", "Splunk alternative Europe 2026", "SIEM node-based pricing" · Long-tail: "what does NIS2 require from a SIEM", "how to evaluate SIEM for DORA compliance", "can Microsoft Sentinel be used for NIS2"</p>
+    </div>
+  </section>
+
+  <!-- §10 SPLUNK DISPLACEMENT PLAYBOOK -->
+  <section id="splunk-playbook">
+    <div class="section-label">
+      <span class="section-num">10</span>
+      <span class="section-tag">Integrated Asset — Defensive</span>
+    </div>
+    <h2>Splunk / Cisco Displacement Playbook — Battlecard &amp; Migration Messaging</h2>
+
+    <div class="callout yellow">
+      <h4>Why Now</h4>
+      <p>Cisco completed its $28B Splunk acquisition in late 2024. European enterprise Splunk customers are entering renewals under a changed commercial relationship — Cisco account teams, potential Cisco-bundle pricing pressure, and genuine roadmap uncertainty. Simultaneously, NIS2 and DORA enforcement creates a new compliance vector that Splunk/Cisco's US jurisdiction cannot cleanly address. This is the largest displacement window guardsix has had in its history.</p>
+    </div>
+
+    <div class="grid-2" style="margin-top:20px;">
+
+      <!-- BATTLECARD LEFT COL -->
+      <div>
+        <div class="col-title">Competitive Battlecard — Splunk vs. Guardsix</div>
+
+        <div class="card" style="margin-bottom:14px;">
+          <div class="card-header" style="padding:12px 16px;">
+            <h3 style="font-size:13px;margin:0;">Their Pitch (What Splunk Says)</h3>
+          </div>
+          <div class="card-body" style="padding:14px 16px;">
+            <ul class="bullet-list">
+              <li><span class="bul bul-purple"></span>"Market-leading SIEM with 46% share and 2,800+ integrations"</li>
+              <li><span class="bul bul-purple"></span>"SPL is the most powerful security query language available"</li>
+              <li><span class="bul bul-purple"></span>"Cisco acquisition adds network telemetry depth and enterprise scale"</li>
+              <li><span class="bul bul-purple"></span>"AI Assistant for SPL brings natural-language investigation"</li>
+              <li><span class="bul bul-purple"></span>"11 consecutive Gartner Magic Quadrant Leader recognitions"</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" style="padding:12px 16px;background:var(--opp-bg);">
+            <h3 style="font-size:13px;margin:0;color:var(--accent2);">Guardsix Counter-Positioning</h3>
+          </div>
+          <div class="card-body" style="padding:14px 16px;">
+            <ul class="bullet-list">
+              <li><span class="bul bul-green"></span><strong>On integration breadth:</strong> "Splunk's 2,800 apps are an ecosystem lock-in. Guardsix integrates with the sources that matter for your environment — without the SPL learning curve or the Splunkbase dependency."</li>
+              <li><span class="bul bul-green"></span><strong>On SPL power:</strong> "SPL is powerful — and it requires specialist hire to operate. Guardsix is built for lean teams, not 50-analyst SOCs. You get strong detection without a dedicated SPL engineer."</li>
+              <li><span class="bul bul-green"></span><strong>On Cisco acquisition:</strong> "Cisco's acquisition means your SIEM roadmap now runs through a network infrastructure company. We're a focused SecOps vendor — SIEM, NDR, SOAR, fleet management — that's all we do."</li>
+              <li><span class="bul bul-green"></span><strong>On EU compliance:</strong> "Splunk is a US company governed by US law. Under the CLOUD Act, the US government can compel access to data stored by US companies regardless of where the data physically sits. Guardsix is Copenhagen-headquartered, EU-jurisdictioned, EAL3+ certified — your data stays under your law."</li>
+              <li><span class="bul bul-green"></span><strong>On pricing:</strong> "Splunk's ingestion-based pricing creates unpredictable bills — especially during an incident, when you're ingesting more data precisely when you can least afford the spike. Guardsix's node-based pricing means you know your cost before the year starts."</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- BATTLECARD RIGHT COL -->
+      <div>
+        <div class="col-title">Objection Handling Scripts</div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;">
+
+          <div class="callout yellow">
+            <h4>"Splunk is the industry standard — our team knows SPL."</h4>
+            <p>"SPL knowledge is valuable — and it's also exactly what makes switching feel risky. We can map your most-used Splunk searches to native guardsix queries as part of migration, and our professional services team has done this for teams in [sector]. The real question is: does the team want to keep paying for a platform built around a query language, or move to a platform built around detection outcomes?"</p>
+          </div>
+
+          <div class="callout yellow">
+            <h4>"We've invested heavily in Splunk integrations and content."</h4>
+            <p>"Your detection content is an asset we help you migrate — not abandon. Guardsix's migration toolkit maps ESCU-based detection rules to our native content library, with a gap analysis showing what transfers directly and what needs rewrite. Most customers migrate 70–80% of active content within the first 60 days."</p>
+          </div>
+
+          <div class="callout yellow">
+            <h4>"Cisco's acquisition actually makes Splunk stronger for us — we're a Cisco shop."</h4>
+            <p>"If you're standardised on Cisco networking, the telemetry integration story does make sense. But your SIEM still operates under US jurisdiction, and your NIS2 auditor will ask about that. The question is whether the convenience of Cisco bundle pricing outweighs a potential compliance finding."</p>
+          </div>
+
+          <div class="callout yellow">
+            <h4>"The cost of migrating away from Splunk is too high."</h4>
+            <p>"Migration cost is real. Let's put it against the cost of staying: your next Splunk renewal under Cisco pricing, your FTE cost to maintain SPL expertise, and your audit exposure on data sovereignty. We offer a structured 90-day migration programme with professional services included — and we can run a parallel environment during transition so you don't lose coverage."</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- TCO COMPARISON -->
+    <div class="col-title" style="margin:20px 0 12px;">3-Year Total Cost of Ownership — Indicative Comparison</div>
+    <div class="matrix-wrap">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th>Cost Component</th>
+            <th>Splunk / Cisco</th>
+            <th class="hi-col">Guardsix (g6)</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Platform Licence</td>
+            <td>$150+/GB/day → unpredictable; workload model still scaling with volume</td>
+            <td class="hi-col">Node-based flat fee — known cost regardless of ingestion volume</td>
+            <td>G6 advantage grows with data volume; critical for incident-spike scenarios</td>
+          </tr>
+          <tr>
+            <td>Staffing (FTE)</td>
+            <td>5–7 FTE for 24/7 coverage; SPL specialist required</td>
+            <td class="hi-col">2–3 FTE with fleet management; no specialist query language hire</td>
+            <td>At $180K avg FTE cost, 3 FTE difference = $540K/yr</td>
+          </tr>
+          <tr>
+            <td>Storage &amp; Infrastructure</td>
+            <td>High compute/storage for on-prem; cloud egress costs for cloud</td>
+            <td class="hi-col">On-prem on customer infrastructure; no egress charges</td>
+            <td>Particularly relevant for high-volume OT/ICS environments</td>
+          </tr>
+          <tr>
+            <td>Compliance Audit Cost</td>
+            <td>CLOUD Act jurisdiction risk may require legal opinion + DPA remediation</td>
+            <td class="hi-col">EAL3+ + EU jurisdiction = clean audit trail; no DPA remediation</td>
+            <td>NIS2 audit findings can result in €10M+ fines for CNI operators</td>
+          </tr>
+          <tr>
+            <td>Migration / Professional Services</td>
+            <td>Switching from Splunk: 6–12 months for enterprise migration</td>
+            <td class="hi-col">90-day structured migration programme; PS included for migrations</td>
+            <td>Guardsix SPL-to-native query mapping toolkit accelerates transition</td>
+          </tr>
+          <tr>
+            <td>Year-2 Pricing Stability</td>
+            <td>Cisco renewal pricing evolution unknown; bundle pressure likely</td>
+            <td class="hi-col">Node-based pricing locked; no year-two reset</td>
+            <td>Splunk customers should request 3-year pricing lock in any renewal</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CHANNEL ACTIVATION -->
+    <div class="grid-2" style="margin-top:20px;">
+      <div>
+        <div class="col-title">Priority Activation Markets</div>
+        <ul class="bullet-list">
+          <li><span class="bul bul-blue"></span><strong>Germany</strong> — NIS2 transposition complete; highest regulatory enforcement density in EU; large Splunk installed base in industrial/energy sector</li>
+          <li><span class="bul bul-blue"></span><strong>Netherlands</strong> — DORA-exposed financial services concentration; NCSC active in SIEM guidance; strong MSSP channel</li>
+          <li><span class="bul bul-blue"></span><strong>France</strong> — ANSSI certification requirements favour European vendors; large public sector; CAC40 DORA obligations</li>
+          <li><span class="bul bul-blue"></span><strong>UK</strong> — Post-Brexit data governance uncertainty has intensified scrutiny of US-jurisdiction vendors; strong financial services and NHS/CNI exposure; UK NCSC guidance increasingly favours vendors with verifiable sovereignty credentials</li>
+          <li><span class="bul bul-blue"></span><strong>Nordics</strong> — Home turf; critical infrastructure operators with high NIS2 exposure; sovereign tech preference strong</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-title">CI Monitoring Triggers to Watch</div>
+        <ul class="bullet-list">
+          <li><span class="bul bul-yellow"></span>Splunk renewal announcements in EU enterprise (LinkedIn posts, press releases)</li>
+          <li><span class="bul bul-yellow"></span>Cisco pricing change announcements and partner channel communications</li>
+          <li><span class="bul bul-yellow"></span>EU regulatory enforcement actions under NIS2 — each creates urgency in adjacent orgs</li>
+          <li><span class="bul bul-yellow"></span>Gartner/Forrester reports referencing Splunk roadmap risk under Cisco — cite these in outreach</li>
+          <li><span class="bul bul-yellow"></span>ENISA threat landscape reports — reference guardsix's compliance capabilities in response content</li>
+          <li><span class="bul bul-yellow"></span>Competitor (Splunk, Sentinel) job postings in EU markets — signals active deployment expansion to compete against</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+  <!-- §11 WAR GAME -->
+  <section id="wargame">
+    <div class="section-label">
+      <span class="section-num">11</span>
+      <span class="section-tag">Strategy Stress Test</span>
+    </div>
+    <h2>Strategy War Game — 18 Scenarios Across 6 Threat Dimensions</h2>
+
+    <div class="callout yellow">
+      <h4>Strategy Under Test</h4>
+      <p>Post-rebrand (Logpoint → guardsix, March 2026): become the sovereign SecOps platform of choice for European MSSPs and regulated mid-market organisations navigating NIS2/DORA enforcement. Differentiate on EU jurisdiction, EAL3+ certification, node-based pricing, and an integrated SIEM+NDR+SOAR stack. Displace Splunk/Cisco in EU renewals while defending against Microsoft Sentinel and CrowdStrike AI narrative encroachment. Target: ~$73M → $120M+ revenue within 36 months via MSSP channel multiplication and new-logo acquisition in CNI, healthcare, and financial services.</p>
+    </div>
+
+    <!-- WG STYLES scoped inside section -->
+    <style>
+      .wg-dim-tabs { display:flex; gap:4px; flex-wrap:wrap; margin:20px 0 16px; }
+      .wg-dim-btn {
+        padding:6px 14px; font-family:'IBM Plex Mono',monospace; font-size:11px;
+        letter-spacing:.06em; text-transform:uppercase; border-radius:var(--radius);
+        border:1px solid var(--border); background:transparent;
+        color:var(--text-muted); cursor:pointer; transition:all .15s; white-space:nowrap;
+      }
+      .wg-dim-btn:hover { color:var(--text); border-color:var(--accent); }
+      .wg-dim-btn.wg-active { color:var(--accent); border-color:var(--accent); background:rgba(88,166,255,0.08); }
+
+      .wg-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:12px; margin-bottom:16px; }
+      .wg-sc {
+        background:var(--surface); border:1px solid var(--border);
+        border-radius:var(--radius-lg); padding:16px; cursor:pointer;
+        transition:border-color .15s;
+      }
+      .wg-sc:hover { border-color:rgba(88,166,255,0.4); }
+      .wg-sc.wg-sc-open { border-color:var(--accent); border-width:1px; }
+      .wg-sc-top { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+      .wg-sc-ico {
+        width:30px; height:30px; border-radius:var(--radius); display:flex;
+        align-items:center; justify-content:center; flex-shrink:0; font-size:14px;
+      }
+      .wg-sc-name { font-size:13px; font-weight:600; color:var(--text); margin:0; }
+      .wg-sc-trigger { font-size:12px; color:var(--text-light); margin:0 0 10px; line-height:1.5; }
+      .wg-badges { display:flex; gap:6px; flex-wrap:wrap; }
+
+      .wg-detail {
+        display:none; background:var(--surface2); border:1px solid var(--border);
+        border-radius:var(--radius-lg); padding:20px; margin-bottom:16px;
+      }
+      .wg-detail.wg-open { display:block; }
+      .wg-detail-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:16px; }
+      .wg-detail-title { font-size:16px; font-weight:600; color:var(--text); margin:0 0 4px; }
+      .wg-detail-dim { font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted); }
+      .wg-detail-cols { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+      .wg-dcol-title { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid var(--border); }
+      .wg-dcol ul { list-style:none; padding:0; margin:0; }
+      .wg-dcol ul li { font-size:12px; color:var(--text-light); padding:5px 0; border-bottom:1px solid var(--border-light); line-height:1.5; display:flex; gap:8px; align-items:flex-start; }
+      .wg-dcol ul li:last-child { border-bottom:none; }
+      .wg-dcol ul li::before { content:'—'; color:var(--text-muted); flex-shrink:0; margin-top:1px; }
+      .wg-close-btn {
+        font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.08em;
+        text-transform:uppercase; color:var(--text-muted); background:none;
+        border:1px solid var(--border); border-radius:var(--radius);
+        padding:4px 10px; cursor:pointer; flex-shrink:0;
+      }
+      .wg-close-btn:hover { color:var(--text); border-color:var(--accent); }
+
+      .wg-badge { font-size:10px; padding:2px 8px; border-radius:20px; font-weight:600; }
+      .wg-crit { background:var(--threat-bg); color:var(--threat); border:1px solid rgba(248,81,73,.3); }
+      .wg-high { background:var(--warn-bg); color:var(--warn); border:1px solid rgba(240,136,62,.3); }
+      .wg-med  { background:var(--opp-bg); color:var(--accent2); border:1px solid rgba(63,185,80,.3); }
+      .wg-lhi  { background:rgba(88,166,255,.08); color:var(--accent); border:1px solid rgba(88,166,255,.3); }
+      .wg-lme  { background:rgba(210,168,255,.08); color:var(--accent4); border:1px solid rgba(210,168,255,.3); }
+      .wg-llo  { background:var(--surface3); color:var(--text-muted); border:1px solid var(--border); }
+
+      .wg-vuln-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+      .wg-vuln {
+        background:var(--surface); border:1px solid var(--border);
+        border-radius:var(--radius-lg); padding:16px;
+        border-left:3px solid;
+      }
+      .wg-vuln.wg-vc { border-left-color:var(--threat); }
+      .wg-vuln.wg-vh { border-left-color:var(--warn); }
+      .wg-vuln.wg-vm { border-left-color:var(--accent2); }
+      .wg-vuln-name { font-size:13px; font-weight:600; color:var(--text); margin:0 0 4px; }
+      .wg-vuln-why { font-size:12px; color:var(--text-light); margin:0 0 8px; line-height:1.5; }
+      .wg-vuln-mit { font-size:12px; color:var(--text-muted); line-height:1.5; }
+      .wg-vuln-mit strong { color:var(--text-light); }
+
+      .wg-heat-row { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+      .wg-heat-label { font-size:12px; color:var(--text-light); width:210px; flex-shrink:0; text-align:right; }
+      .wg-heat-track {
+        flex:1; height:22px; background:var(--surface2);
+        border-radius:var(--radius); overflow:hidden; border:1px solid var(--border);
+      }
+      .wg-heat-fill { height:100%; border-radius:var(--radius); display:flex; align-items:center; padding-left:8px; font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; color:#fff; }
+      .wg-heat-num { font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-muted); width:28px; text-align:right; flex-shrink:0; }
+
+      .wg-playbook { width:100%; border-collapse:collapse; font-size:12px; margin-bottom:20px; }
+      .wg-playbook thead th { font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted); text-align:left; padding:6px 10px; border-bottom:1px solid var(--border); }
+      .wg-playbook tbody td { padding:10px; border-bottom:1px solid var(--border-light); vertical-align:top; color:var(--text-light); line-height:1.5; }
+      .wg-playbook tbody tr:last-child td { border-bottom:none; }
+      .wg-playbook .wg-sig { font-size:12px; color:var(--text); font-weight:600; width:22%; }
+      .wg-playbook .wg-resp { width:54%; }
+      .wg-playbook .wg-own { width:24%; }
+      .wg-owner { display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:10px; padding:2px 8px; border-radius:3px; background:var(--surface3); color:var(--text-muted); border:1px solid var(--border); white-space:nowrap; }
+
+      @media (max-width:700px) {
+        .wg-detail-cols { grid-template-columns:1fr; }
+        .wg-vuln-grid { grid-template-columns:1fr; }
+      }
+    </style>
+
+    <!-- DIM FILTER TABS -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin-top:4px;">
+
+    <div class="wg-dim-tabs" id="wg-tabs">
+      <button class="wg-dim-btn wg-active" data-wdim="all">All (18)</button>
+      <button class="wg-dim-btn" data-wdim="competitor">Competitor</button>
+      <button class="wg-dim-btn" data-wdim="regulatory">Regulatory</button>
+      <button class="wg-dim-btn" data-wdim="market">Market shift</button>
+      <button class="wg-dim-btn" data-wdim="customer">Customer</button>
+      <button class="wg-dim-btn" data-wdim="operational">Operational</button>
+      <button class="wg-dim-btn" data-wdim="financial">Financial</button>
+    </div>
+
+    <!-- SCENARIO CARDS -->
+    <div class="wg-grid" id="wg-grid"></div>
+    <div class="wg-detail" id="wg-detail"></div>
+
+    <!-- VULNERABILITIES -->
+    <div class="col-title" style="margin:20px 0 14px;">Core vulnerabilities</div>
+    <div class="wg-vuln-grid">
+      <div class="wg-vuln wg-vc">
+        <div class="wg-vuln-name">Single strategic pillar: sovereignty</div>
+        <div class="wg-vuln-why">The entire positioning rests on the CLOUD Act argument. If EU regulators clarify that Microsoft Azure EU Data Boundary satisfies NIS2 Article 21, the primary differentiation collapses overnight — with no secondary narrative ready to substitute.</div>
+        <div class="wg-vuln-mit"><strong>Mitigation:</strong> Build a second moat now — deepen the MSSP fleet management and SAP security stories so that switching costs, not just sovereignty, lock in customers.</div>
+      </div>
+      <div class="wg-vuln wg-vc">
+        <div class="wg-vuln-name">Rebrand brand equity gap</div>
+        <div class="wg-vuln-why">372 Gartner reviews, analyst reports, and partner portals still reference "Logpoint." Every new buyer searching "guardsix" hits thin results. The window to close this gap is 90 days post-rebrand — already 3 months in and underinvested.</div>
+        <div class="wg-vuln-mit"><strong>Mitigation:</strong> Immediate SEO migration sprint, Gartner/G2 profile updates, and a CEO-authored "why we rebranded" editorial with broad syndication.</div>
+      </div>
+      <div class="wg-vuln wg-vh">
+        <div class="wg-vuln-name">AI narrative deficit vs. Sentinel &amp; CrowdStrike</div>
+        <div class="wg-vuln-why">Copilot for Security and Charlotte AI are winning the AI SIEM narrative. Guardsix's Muninn NDR and UEBA are credible but under-branded. In an AI-centric shortlist evaluation, the gap is currently visible and widening.</div>
+        <div class="wg-vuln-mit"><strong>Mitigation:</strong> Launch "AI in Command Centre" capability page with benchmarked detection data, on-prem AI latency advantages, and Muninn case studies within 60 days.</div>
+      </div>
+      <div class="wg-vuln wg-vh">
+        <div class="wg-vuln-name">Scale gap limits enterprise velocity</div>
+        <div class="wg-vuln-why">263 employees vs. 300,000+ at TP; 4,000+ at Splunk/Cisco security division. R&amp;D velocity, field sales coverage, and integration ecosystem depth are all structurally constrained. A single large competitor prioritisation decision can outpace Guardsix's roadmap.</div>
+        <div class="wg-vuln-mit"><strong>Mitigation:</strong> Channel-led growth (each MSSP partner multiplies revenue without headcount) is the only viable path to scale. The MSSP programme must be the primary growth vehicle, not direct enterprise.</div>
+      </div>
+      <div class="wg-vuln wg-vh">
+        <div class="wg-vuln-name">Parsing complexity — customer-reported friction</div>
+        <div class="wg-vuln-why">The most frequent Gartner review criticism. Competitors will demonstrate simpler parsing in POC evaluations. Without improvement or pre-built content packs, this hands deals to Sentinel and Splunk during live evaluations.</div>
+        <div class="wg-vuln-mit"><strong>Mitigation:</strong> Pre-built parser library expansion (priority: Windows AD, Azure, AWS) + guided parsing wizard in UI. Target: zero reviewer mentions of parsing friction within 12 months.</div>
+      </div>
+      <div class="wg-vuln wg-vm">
+        <div class="wg-vuln-name">Integration ecosystem narrowness</div>
+        <div class="wg-vuln-why">Splunk's 2,800-app Splunkbase is a default buying objection. In enterprise evaluations, gaps in integration coverage give procurement teams a documented reason to prefer the incumbent.</div>
+        <div class="wg-vuln-mit"><strong>Mitigation:</strong> Publish a transparent integration roadmap with community contribution pathway. Focus on the top 50 enterprise connectors missing vs. Splunkbase — not breadth but signal.</div>
+      </div>
+    </div>
+
+    <!-- HEAT MAP -->
+    <div class="col-title" style="margin:0 0 14px;">Scenario risk heat map</div>
+    <div id="wg-heat"></div>
+
+    <!-- RESPONSE PLAYBOOK -->
+    <div class="col-title" style="margin:20px 0 14px;">Response playbook — early warning signals</div>
+    <table class="wg-playbook">
+      <thead><tr><th>Signal</th><th>Response</th><th>Owner</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="wg-sig">Microsoft announces Azure EU Data Boundary satisfies NIS2 Article 21</td>
+          <td class="wg-resp">Activate second-moat messaging immediately: MSSP fleet management TCO, EAL3+ certification specificity, air-gap deployment. Publish independent EU privacy legal analysis distinguishing data residency from jurisdictional control. Do not concede — push to the EAL3+/CLOUD Act technical layer.</td>
+          <td class="wg-own"><span class="wg-owner">CEO + CMO</span></td>
+        </tr>
+        <tr>
+          <td class="wg-sig">Cisco re-brands Splunk EU as a "sovereign" product</td>
+          <td class="wg-resp">Pre-empt with EAL3+ certification as the required bar — reframe sovereignty as Common Criteria certification, not headquarter geography. Initiate technical briefings with ENISA and national CERTs. If Cisco cannot achieve EAL3+ within 18 months, certification becomes a durable moat.</td>
+          <td class="wg-own"><span class="wg-owner">Product + CTO</span></td>
+        </tr>
+        <tr>
+          <td class="wg-sig">MSSP partner pipeline stalls below 8 active channel deals in a quarter</td>
+          <td class="wg-resp">Immediately audit MSSP onboarding friction — commercial model, technical enablement, or fleet management UX. Assign dedicated MSSP partner engineering resource. Consider a partner-funded proof-of-concept programme to accelerate commitment.</td>
+          <td class="wg-own"><span class="wg-owner">VP Channel</span></td>
+        </tr>
+        <tr>
+          <td class="wg-sig">Splunk renewal win rate in EU drops below 30% in any quarter</td>
+          <td class="wg-resp">Intensify displacement outreach the following quarter — this signals the TCO argument is landing but execution is ahead of positioning. Accelerate the migration toolkit and SPL-to-native query mapping documentation. Brief 3 MSSP partners per market on new displacement assets.</td>
+          <td class="wg-own"><span class="wg-owner">Sales + CI</span></td>
+        </tr>
+        <tr>
+          <td class="wg-sig">CrowdStrike or Palo Alto announces a European-incorporated data residency subsidiary</td>
+          <td class="wg-resp">Publish technical brief showing what a "European subsidiary" does and does not protect against under the CLOUD Act. If the CLOUD Act argument becomes legally contested, accelerate the EAL3+ and on-prem narrative — these hold regardless of legal interpretation shifts.</td>
+          <td class="wg-own"><span class="wg-owner">Legal + CMO</span></td>
+        </tr>
+        <tr>
+          <td class="wg-sig">Key MSSP partner signs preferred-vendor agreement with Splunk or Sentinel</td>
+          <td class="wg-resp">Trigger competitive retention: product roadmap co-creation invitation, commercial concession on fleet node pricing, executive sponsor pairing. If the partner is lost, map their customer base and initiate direct outreach — MSSP customers are not contractually bound to move with the MSSP.</td>
+          <td class="wg-own"><span class="wg-owner">CEO + VP Sales</span></td>
+        </tr>
+        <tr>
+          <td class="wg-sig">Gartner Peer Insights rating drops below 4.0 or criticism shifts from product to support</td>
+          <td class="wg-resp">Activate structured customer success intervention for the affected reviewer cohort. If parsing reviews increase, escalate parser library roadmap to Q1 priority. If support quality drops, audit whether the rebrand created confusion in support channels and remediate immediately.</td>
+          <td class="wg-own"><span class="wg-owner">CPO + CX</span></td>
+        </tr>
+        <tr>
+          <td class="wg-sig">Two or more EU NIS2 enforcement fines issued publicly in CNI sectors</td>
+          <td class="wg-resp">Activate rapid-response content within 5 business days: press release citing enforcement actions, a blog post on what compliant SIEM logging looked like in the breached environments, and direct outreach to 20 CNI prospects in the same vertical. Highest-ROI moment for the sovereign SIEM narrative.</td>
+          <td class="wg-own"><span class="wg-owner">CMO + Sales</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    </div><!-- /war game card wrapper -->
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-left">
+    <span class="footer-logo">g6 // CI</span>
+    <div>
+      <div style="font-size:13px;font-weight:600;color:var(--text);">Guardsix (formerly Logpoint) — Competitive Brief</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Strategy & Competitive Intelligence — Internal Use Only</div>
+    </div>
+  </div>
+  <div class="footer-meta">
+    Research Date: June 7, 2026<br>
+    Sources: Guardsix.com, Summa Equity, Gartner, PitchBook, Tracxn, ISMC, BankInfoSecurity<br>
+    Note: "Logpoint" and "guardsix" refer to the same entity pre/post March 12, 2026
+  </div>
+</div>
+
+<script>
+  function switchTab(id) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    const ids = ['splunk','sentinel','exabeam','crowdstrike','ibm'];
+    const idx = ids.indexOf(id);
+    document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+    document.getElementById('panel-' + id).classList.add('active');
+  }
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const el = document.querySelector(a.getAttribute('href'));
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  /* ── WAR GAME ── */
+  const WG_SCENARIOS = [
+    { id:1, dim:'competitor', name:'Microsoft launches "Sentinel Sovereign EU"', trigger:'Microsoft incorporates a separate EU-governed legal entity operating Sentinel under purely European law, directly addressing CLOUD Act arguments.', likelihood:'Medium', severity:'Critical',
+      impact:['Primary differentiation (EU sovereignty) directly neutralised for non-technical buyers','Procurement teams can check the compliance box without switching vendors','G6 loses the easiest-to-explain positioning argument in RFPs'],
+      signals:['Azure EU Data Boundary blog posts cite NIS2 Article 21 compliance specifically','Microsoft job postings in Frankfurt/Dublin for "EU Sovereign Cloud Legal" roles','ENISA or national CERT issues guidance treating Azure EU zones as compliant'],
+      responses:['Immediately activate EAL3+ / Common Criteria certification as the new bar — most buyers do not understand the technical depth; make them learn it','Commission independent EU privacy legal opinion clarifying CLOUD Act vs. data residency distinction','Deepen MSSP fleet economics story — sovereignty can be a tie-breaker, not the only argument'] },
+    { id:2, dim:'competitor', name:'Splunk/Cisco creates a "Splunk EU" entity', trigger:'Cisco creates a European-incorporated Splunk subsidiary with explicit data sovereignty guarantees, targeting NIS2-driven renewals.', likelihood:'Medium', severity:'High',
+      impact:['Splunk displacement playbook loses its jurisdiction argument for non-technical buyers','Renewal conversations shift to features and pricing rather than compliance','Competitor gains 12–18 months of "sovereignty credibility" even if technically incomplete'],
+      signals:['Splunk job postings in EU for "Data Sovereignty Lead" or "EU Regulatory Counsel"','Cisco partner communications referencing new EU compliance certification timelines','Gartner analysts begin listing Splunk under "EU-compliant" in SIEM reports'],
+      responses:['Challenge the claim at the technical level: EAL3+ certification cannot be replicated quickly — make it the required standard','Accelerate production of the legal differentiation brief before Cisco can produce counter-messaging','Shift TCO argument into primary position for Splunk deals — the cost advantage persists regardless of sovereignty evolution'] },
+    { id:3, dim:'competitor', name:'Exabeam acquires a European SIEM vendor', trigger:'Exabeam acquires Securonix EU or a comparable DACH SIEM player, gaining European headquarters, data residency certifications, and an MSSP channel.', likelihood:'Low', severity:'High',
+      impact:['Creates a credible sovereign-alternative for mid-market UEBA buyers','Exabeam would acquire G6\'s exact ICP with existing European customer relationships','MSSP channel could be recruited away if partner economics are superior'],
+      signals:['Exabeam hiring in European markets for Partner/Channel roles','Exabeam press releases about EU "expansion" or "strategic partnerships"','European SIEM vendors attracting due diligence rumours on LinkedIn or specialist press'],
+      responses:['Accelerate MSSP partner exclusivity agreements in key markets','Publish "Guardsix vs. US-headquartered SIEM with EU presence" positioning content proactively','Brief European MSSP channel on the EAL3+ distinction before Exabeam can present'] },
+    { id:4, dim:'competitor', name:'Charlotte AI wins SIEM evaluations on AI narrative alone', trigger:'CrowdStrike Charlotte AI becomes so dominant in RFP scoring that non-AI-parity vendors are eliminated in shortlisting before sovereignty questions are even raised.', likelihood:'High', severity:'High',
+      impact:['G6 excluded from AI-centric evaluations before sovereignty differentiator can land','Muninn NDR and UEBA not perceived as equivalent AI capability','RFP scoring rubrics reweight toward GenAI investigation features where G6 trails'],
+      signals:['Win/loss analysis shows deals lost before sovereignty conversation began','SIEM RFP templates increasingly include "GenAI investigation capability" as a scored requirement','Analyst reports begin citing AI parity as a baseline expectation for SIEM consideration'],
+      responses:['Launch "AI in Command Centre" product marketing within 60 days — benchmarked detection data, Muninn specifics, on-prem AI latency advantages','Brief Gartner and Forrester on Muninn NDR AI story specifically','Develop counter-narrative: on-prem AI offers reproducible detection, no cloud latency, no data sovereignty compromise for AI model training'] },
+    { id:5, dim:'competitor', name:'Palo Alto XSIAM enters European regulated market', trigger:'Palo Alto Networks accelerates XSIAM into European CNI and financial services with a dedicated EU data residency commitment and aggressive partner pricing.', likelihood:'Medium', severity:'High',
+      impact:['A well-funded XDR+SIEM platform with deep endpoint coverage enters G6\'s primary market','XSIAM\'s AI-first architecture positions it above G6 on both AI and platform breadth','MSSP partners evaluating XDR platforms may choose XSIAM over maintaining a separate SIEM stack'],
+      signals:['Palo Alto job postings for EU public sector and financial services specialists','XSIAM MSSP programme launch announcements in EMEA','CNI prospect conversations referencing XSIAM in shortlist discussions'],
+      responses:['Develop explicit XSIAM comparison content — sovereignty, EAL3+, deployment flexibility, and cost transparency are structural advantages G6 holds','Engage MSSP partners early with a "why a dedicated sovereign SIEM beats an XDR add-on" brief','Position G6 as the complement to endpoint-first platforms, not a direct XDR competitor'] },
+    { id:6, dim:'regulatory', name:'EU softens CLOUD Act guidance for US vendors', trigger:'EU-US Data Privacy Framework is extended or reinforced with specific carve-outs effectively allowing US-jurisdiction vendors to satisfy NIS2 Article 21 without European incorporation.', likelihood:'Low', severity:'Critical',
+      impact:['Core sovereignty argument becomes a secondary consideration rather than a disqualifier','NIS2/DORA tailwind reverses — US vendors re-enter previously closed deals','G6\'s positioning requires a fundamental pivot within 90 days'],
+      signals:['EDPB issues updated guidance reducing CLOUD Act threat assessment','EU-US negotiation announcements referencing "security software" carve-outs','National supervisory authorities issue guidance permitting US-vendor SIEM for CNI operators'],
+      responses:['Activate the second-moat narrative immediately: EAL3+, on-prem air-gap, node pricing, MSSP fleet management','Commission an independent legal brief establishing the residual risks — do not abandon sovereignty, but reframe it','If the moat collapses, product investment priority must shift to AI parity with Sentinel/CrowdStrike'] },
+    { id:7, dim:'regulatory', name:'NIS2 enforcement delayed or weakened', trigger:'EU Commission delays NIS2 transposition enforcement timelines, or member states apply weak penalties that reduce compliance urgency for affected organisations.', likelihood:'Low', severity:'Medium',
+      impact:['Procurement urgency in CNI/regulated sectors drops significantly','SIEM evaluations shift back to cost/feature, not compliance-first','G6\'s NIS2 tailwind reduces — pipeline timing extends'],
+      signals:['Member states begin requesting NIS2 implementation extensions','Industry lobby groups publicly requesting phased enforcement','Reduction in SIEM RFP volume in Q3/Q4 from regulated verticals'],
+      responses:['Shift content emphasis toward operational efficiency and threat detection ROI rather than compliance-only messaging','Develop a "Compliance-ready but operationally superior" narrative so G6 wins deals on merit, not deadline pressure','Maintain compliance content library — enforcement delays are temporary'] },
+    { id:8, dim:'regulatory', name:'EAL3+ superseded by new EUCS certification', trigger:'A new European cybersecurity certification scheme (EUCS) replaces Common Criteria EAL3+ as the recognised standard for SIEM procurement in regulated sectors.', likelihood:'Medium', severity:'High',
+      impact:['A hard-won certification moat is eliminated if competitors achieve the new standard first','G6\'s certification advantage window closes; first-mover advantage in new scheme is critical','Procurement teams may temporarily apply neither standard — creating evaluation chaos'],
+      signals:['ENISA announces EUCS scheme publication timeline with SIEM product category','Industry consultation documents referencing Common Criteria replacement','Member state procurement policies referencing EUCS as preferred certification'],
+      responses:['Engage immediately as a named stakeholder in EUCS consultation process','Commit CTO-level resource to achieving EUCS certification before competitors','Maintain and publicise EAL3+ during the transition period — it remains valid until superseded'] },
+    { id:9, dim:'market', name:'SIEM category is absorbed into XDR platforms', trigger:'CrowdStrike XSIAM, Palo Alto Cortex, and Microsoft Sentinel converge on a "unified XDR" buying category, making standalone SIEM a legacy procurement category within 24 months.', likelihood:'Medium', severity:'Critical',
+      impact:['G6\'s product positioning becomes "legacy SIEM" rather than "modern SecOps platform"','MSSP channel shifts purchasing to XDR platforms with SIEM included','RFP categories change — SIEM line item disappears in favour of XDR suite'],
+      signals:['Gartner releases an XDR Magic Quadrant that absorbs SIEM evaluation criteria','Enterprise security budgets shift from "SIEM" to "XDR" line items in analyst surveys','Top 3 MSSP partners begin evaluating XDR platform replacements for SIEM stack'],
+      responses:['Reposition Command Centre as a "sovereign SecOps platform" not a "SIEM" — the current rebrand direction is correct but must accelerate','Integrate Muninn NDR deeply into the product story as the XDR element G6 already has','Partner with an EDR vendor for a technical integration that gives G6 an XDR adjacency without building endpoint security from scratch'] },
+    { id:10, dim:'market', name:'Agentic AI compresses SOC analyst headcount', trigger:'Agentic AI from Sentinel, CrowdStrike, and emerging startups automates 80%+ of Level 1/2 SOC analyst work, making "lean team enablement" an insufficient differentiation.', likelihood:'Medium', severity:'High',
+      impact:['G6\'s "built for lean teams" positioning becomes a minimum viable claim rather than a differentiator','Customers ask: "can G6 SOAR fully automate without any analyst?"','MSSP business model is disrupted — if AI replaces analysts, the MSSP value prop changes fundamentally'],
+      signals:['Competitors launch "autonomous SOC" marketing campaigns with case studies','MSSP partners begin reporting reduced headcount needs in customer conversations','Job postings for L1/L2 SOC analysts drop materially across European financial services'],
+      responses:['Position SOAR automation as a roadmap priority and publish automation rate benchmarks','Develop a "human-in-the-loop for regulated environments" narrative — regulators may require human oversight that cannot be automated away','Brief MSSP partners on how agentic AI changes their service economics before they discover it adversely'] },
+    { id:11, dim:'market', name:'New-entrant European sovereign SIEM emerges', trigger:'A VC-backed European SIEM startup raises €50M+ to build a cloud-native, sovereign, AI-first SIEM targeting exactly G6\'s ICP with modern architecture.', likelihood:'Medium', severity:'Medium',
+      impact:['G6\'s "only European SIEM" narrative is diluted or eliminated','Competition for MSSP channel partners intensifies with potentially better economics','Analyst recognition could be split, reducing G6\'s certification premium perception'],
+      signals:['European cybersecurity VC deal announcements above €30M in SIEM/SecOps','ENISA cyber cluster event appearances by unfamiliar European SIEM vendors','MSSP partner conversations referencing "alternatives to Logpoint/Guardsix"'],
+      responses:['Accelerate the EAL3+ narrative — a new entrant cannot achieve EAL3+ for 3–4 years minimum','Deepen MSSP partner lock-in through co-sell commercial models before a rival can recruit them','Commission a competitive analysis immediately to identify differentiation gaps that a cloud-native entrant would exploit'] },
+    { id:12, dim:'customer', name:'MSSP partners fail to achieve sales targets', trigger:'Key MSSP partners under-perform against pipeline commitments due to commercial challenges, poor onboarding, or competitor displacement within the MSSP.', likelihood:'High', severity:'High',
+      impact:['Revenue growth misses target — MSSP is the primary growth vehicle','Each underperforming partner represents a cluster of lost customer opportunities','PE growth expectations force premature direct sales investment, undermining cost structure'],
+      signals:['MSSP partner pipeline reviews show <50% attainment vs. plan for 2 consecutive quarters','MSSP support ticket volume rises without proportional deal closures','Partner NPS below 7 in quarterly partner satisfaction survey'],
+      responses:['Assign dedicated partner success managers to top 5 MSSP partners','Introduce a co-sell model where G6 field reps assist MSSP partners in enterprise deals above a threshold value','Review commercial model — is the partner margin sufficient for the MSSP to prioritise G6 over Splunk/Sentinel resell?'] },
+    { id:13, dim:'customer', name:'Enterprise customers demand XDR parity at renewal', trigger:'At renewal, existing enterprise customers request XDR capabilities (endpoint detection, cloud workload protection) that G6 does not currently provide, threatening churn.', likelihood:'High', severity:'Medium',
+      impact:['Renewal churn rate increases above 15% in any cohort','Muninn NDR alone is insufficient to position as XDR-comparable','Revenue predictability erodes — PE backer growth expectations at risk'],
+      signals:['Renewal conversations include "XDR evaluation" agenda items','Win/loss exit surveys cite "we need an XDR platform" as a departure reason','Customer success notes referencing requests for EDR or cloud workload capability'],
+      responses:['Accelerate Muninn NDR go-to-market to signal product direction','Identify EDR integration partners for a joint "sovereign XDR" story','Develop a product roadmap communication programme for renewal accounts — show the trajectory, not just the current state'] },
+    { id:14, dim:'customer', name:'Gartner Peer Insights rating deteriorates post-rebrand', trigger:'The rebrand creates customer support confusion or expectation misalignment that manifests as new negative reviews, dropping the 4.2 rating below 4.0.', likelihood:'Low', severity:'Medium',
+      impact:['4.2 → 3.8 is sufficient to remove G6 from shortlists that filter on rating','Competitive narrative against G6 is handed easy ammunition','MSSP prospects use review data as a proxy for operational risk'],
+      signals:['Monthly review monitoring shows >20% increase in 1–2 star reviews vs. prior 90-day baseline','Negative review themes shift from product (parsing) to support/service (rebrand confusion)','Support ticket CSAT scores drop below 4.0 in the first rebrand quarter'],
+      responses:['Deploy a customer success outreach campaign to all accounts in the first 90 days post-rebrand — proactively identify confusion before it becomes a review','Incentivise satisfied customers to submit reviews during the rebrand window to maintain rating baseline','Establish a closed-loop review response programme — respond publicly to every negative review within 48 hours'] },
+    { id:15, dim:'operational', name:'Muninn NDR integration fails technically', trigger:'Post-acquisition integration of Muninn NDR into Command Centre is delayed by architectural incompatibilities, creating a gap between the "integrated SIEM+NDR" marketing claim and product reality.', likelihood:'Medium', severity:'High',
+      impact:['The core product differentiation (native SIEM+NDR) is a marketable claim without a GA delivery','Deals won on the NDR integration story create a credibility risk at deployment','Competitors catch up during the delay window'],
+      signals:['Engineering team velocity reporting shows Muninn integration milestone slippage','Customer success reporting "NDR integration not as seamless as expected" in onboarding calls','CTO escalation of integration complexity in product steering committee'],
+      responses:['Immediately create a transparent product status page with NDR integration milestones — do not allow customer expectation to outrun delivery','Separate the Muninn NDR product from the Command Centre integration in go-to-market until integration is GA','Accelerate the dedicated Muninn NDR go-to-market as an interim bridge'] },
+    { id:16, dim:'operational', name:'Key engineering talent exits post-rebrand', trigger:'The rebrand creates internal cultural uncertainty, and 3–5 senior engineering or product leaders depart, creating roadmap execution risk.', likelihood:'Low', severity:'High',
+      impact:['Muninn NDR integration, SOAR automation, and AI narrative development all depend on senior engineers whose institutional knowledge cannot be quickly replaced','Competitor recruitment teams actively target Guardsix engineers during rebrand uncertainty windows','Product velocity drops below what is needed to close the AI parity gap'],
+      signals:['LinkedIn activity from senior G6 engineers increases significantly post-rebrand','Engineering team pulse survey NPS drops below 7','Two or more senior IC or lead departures in a 60-day window'],
+      responses:['Rapid retention review: targeted equity refresh for critical path engineers before competitor outreach lands','CEO internal communication clarifying strategic rationale and growth trajectory — rebrand must feel like an upgrade, not instability','Create internal product ownership roles for Muninn integration that give key engineers visible leadership responsibility'] },
+    { id:17, dim:'operational', name:'Rebrand creates partner/reseller confusion', trigger:'"Logpoint" branding persists on partner portals, reseller contracts, and distributor price lists, creating dual-brand confusion that slows deal velocity in the channel.', likelihood:'High', severity:'Medium',
+      impact:['MSSP and reseller partners present inconsistent materials to prospects — "Logpoint" and "guardsix" appearing in the same evaluation','Procurement teams delay sign-off pending brand/entity clarification','Deal cycle length increases by 2–3 weeks per deal during the transition period'],
+      signals:['Channel team reporting prospects asking "is Logpoint and guardsix the same company?"','Partner portal logins drop in the 30 days post-rebrand as partners await updated assets','Reseller contracts referencing "Logpoint" still being issued by partners 60+ days post-rebrand'],
+      responses:['Immediate partner enablement pack: single-page "Logpoint is now guardsix" explainer, updated logo assets, bridging FAQ for prospect conversations','Dedicate a partner success resource to updating all distributor and reseller contract templates within 30 days','Partner incentive for completing rebrand transition activities — accelerates compliance without mandate'] },
+    { id:18, dim:'financial', name:'Summa Equity accelerates exit timeline', trigger:'PE backer Summa Equity accelerates the exit preparation timeline — creating pressure to optimise for EBITDA over growth, conflicting with the product investment required for AI parity and MSSP channel build.', likelihood:'Medium', severity:'High',
+      impact:['Investment in Muninn NDR integration, AI narrative development, and parser improvement is cut','MSSP channel enablement programme is underfunded at the exact moment it needs acceleration','The 36-month $120M revenue target becomes unachievable under cost-optimisation posture'],
+      signals:['Summa Equity appoints investment banker for formal M&A process','CFO receives guidance to improve EBITDA margin by 8+ points','Senior leadership team changes suggesting PE-standard "exit team" appointments'],
+      responses:['Prepare a "growth vs. exit" case for the board that quantifies the MSSP channel multiplier effect — show that the channel investment pays back within 18 months','Identify an acquisition buyer that values EU sovereignty + EAL3+ + MSSP channel at a strategic premium over EBITDA multiples','Structure Muninn NDR and AI investments as capitalised assets not opex — improves EBITDA presentation without cutting growth investment'] },
+    { id:19, dim:'financial', name:'Node-based pricing undercuts revenue at scale', trigger:'As customer environments grow, node-based pricing delivers disproportionately less revenue than ingestion-based alternatives, creating a unit economics problem that limits gross margin expansion.', likelihood:'Medium', severity:'Medium',
+      impact:['Revenue growth lags ARR expansion as customers add capacity without proportional pricing uplift','Gross margin compression limits R&D reinvestment capacity','The pricing model that wins deals becomes the constraint on company economics at scale'],
+      signals:['Net Revenue Retention (NRR) falls below 110% despite expanding customer usage','CFO reporting increasing gap between seat/node count growth and revenue growth','Customer success reporting significant environment growth without corresponding commercial uplift conversations'],
+      responses:['Introduce an "advanced feature" tier (SOAR automation credits, AI investigation queries, NDR sensor density) that creates consumption-linked revenue on top of the node base','Build a Customer Success-driven expansion playbook that converts environment growth events into upsell conversations within 30 days of detection','Ensure node pricing tiers are granular enough that meaningful environment growth triggers the next pricing band automatically'] }
+  ];
+
+  const WG_HEAT = [
+    { label:'Sovereignty narrative collapse (Sentinel)', score:95, color:'#f85149' },
+    { label:'MSSP partner underperformance', score:88, color:'#f85149' },
+    { label:'XDR category replaces SIEM', score:82, color:'#f0883e' },
+    { label:'Charlotte AI wins on AI narrative', score:80, color:'#f0883e' },
+    { label:'Splunk EU sovereign entity', score:72, color:'#f0883e' },
+    { label:'Muninn NDR integration failure', score:68, color:'#f0883e' },
+    { label:'XDR demand at enterprise renewal', score:65, color:'#e3b341' },
+    { label:'Rebrand partner/channel confusion', score:62, color:'#e3b341' },
+    { label:'Summa equity exit pressure', score:60, color:'#e3b341' },
+    { label:'EUCS certification supersedes EAL3+', score:55, color:'#e3b341' },
+  ];
+
+  function wgSevClass(s) { return s==='Critical'?'wg-crit':s==='High'?'wg-high':'wg-med'; }
+  function wgLikClass(l) { return l==='High'?'wg-lhi':l==='Medium'?'wg-lme':'wg-llo'; }
+  function wgDimLabel(d) {
+    return {competitor:'Competitor',regulatory:'Regulatory',market:'Market shift',customer:'Customer',operational:'Operational',financial:'Financial'}[d]||d;
+  }
+  function wgDimIco(d) {
+    return {competitor:'⚔',regulatory:'⚖',market:'📈',customer:'👥',operational:'⚙',financial:'💰'}[d]||'⚠';
+  }
+  function wgDimBg(d) {
+    return {competitor:'rgba(248,81,73,.1)',regulatory:'rgba(240,136,62,.1)',market:'rgba(210,168,255,.1)',customer:'rgba(63,185,80,.1)',operational:'rgba(88,166,255,.1)',financial:'rgba(72,79,88,.2)'}[d]||'rgba(72,79,88,.2)';
+  }
+  function wgDimClr(d) {
+    return {competitor:'#f85149',regulatory:'#f0883e',market:'#d2a8ff',customer:'#3fb950',operational:'#58a6ff',financial:'#8b949e'}[d]||'#8b949e';
+  }
+
+  let wgActiveDim='all', wgOpenId=null;
+
+  function wgRender() {
+    const grid=document.getElementById('wg-grid');
+    if(!grid)return;
+    const list=wgActiveDim==='all'?WG_SCENARIOS:WG_SCENARIOS.filter(s=>s.dim===wgActiveDim);
+    grid.innerHTML=list.map(sc=>`
+      <div class="wg-sc${wgOpenId===sc.id?' wg-sc-open':''}" onclick="wgToggle(${sc.id})">
+        <div class="wg-sc-top">
+          <div class="wg-sc-ico" style="background:${wgDimBg(sc.dim)};color:${wgDimClr(sc.dim)};">${wgDimIco(sc.dim)}</div>
+          <p class="wg-sc-name">${sc.name}</p>
+        </div>
+        <p class="wg-sc-trigger">${sc.trigger}</p>
+        <div class="wg-badges">
+          <span class="wg-badge ${wgSevClass(sc.severity)}">Severity: ${sc.severity}</span>
+          <span class="wg-badge ${wgLikClass(sc.likelihood)}">Likelihood: ${sc.likelihood}</span>
+          <span class="wg-badge wg-llo">${wgDimLabel(sc.dim)}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function wgToggle(id) {
+    const detail=document.getElementById('wg-detail');
+    if(!detail)return;
+    if(wgOpenId===id){ wgOpenId=null; detail.classList.remove('wg-open'); wgRender(); return; }
+    const sc=WG_SCENARIOS.find(s=>s.id===id);
+    wgOpenId=id;
+    detail.classList.add('wg-open');
+    detail.innerHTML=`
+      <div class="wg-detail-head">
+        <div>
+          <div class="wg-detail-dim">${wgDimLabel(sc.dim)} scenario</div>
+          <div class="wg-detail-title">${sc.name}</div>
+          <div style="display:flex;gap:6px;margin-top:6px;">
+            <span class="wg-badge ${wgSevClass(sc.severity)}">Severity: ${sc.severity}</span>
+            <span class="wg-badge ${wgLikClass(sc.likelihood)}">Likelihood: ${sc.likelihood}</span>
+          </div>
+        </div>
+        <button class="wg-close-btn" onclick="wgToggle(${id})">Close ✕</button>
+      </div>
+      <div class="wg-detail-cols">
+        <div class="wg-dcol">
+          <div class="wg-dcol-title">Strategic impact</div>
+          <ul>${sc.impact.map(i=>`<li><span>${i}</span></li>`).join('')}</ul>
+        </div>
+        <div class="wg-dcol">
+          <div class="wg-dcol-title">Early warning signals</div>
+          <ul>${sc.signals.map(s=>`<li><span>${s}</span></li>`).join('')}</ul>
+        </div>
+        <div class="wg-dcol">
+          <div class="wg-dcol-title">Response moves</div>
+          <ul>${sc.responses.map(r=>`<li><span>${r}</span></li>`).join('')}</ul>
+        </div>
+      </div>
+    `;
+    wgRender();
+    detail.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+  function wgHeat() {
+    const wrap=document.getElementById('wg-heat');
+    if(!wrap)return;
+    wrap.innerHTML=WG_HEAT.map(d=>`
+      <div class="wg-heat-row">
+        <div class="wg-heat-label">${d.label}</div>
+        <div class="wg-heat-track">
+          <div class="wg-heat-fill" style="width:${d.score}%;background:${d.color};">${d.score}</div>
+        </div>
+        <div class="wg-heat-num">${d.score}</div>
+      </div>
+    `).join('');
+  }
+
+  const wgTabsEl=document.getElementById('wg-tabs');
+  if(wgTabsEl) wgTabsEl.addEventListener('click',e=>{
+    const btn=e.target.closest('.wg-dim-btn');
+    if(!btn)return;
+    wgActiveDim=btn.dataset.wdim;
+    wgOpenId=null;
+    document.getElementById('wg-detail').classList.remove('wg-open');
+    wgTabsEl.querySelectorAll('.wg-dim-btn').forEach(b=>b.classList.remove('wg-active'));
+    btn.classList.add('wg-active');
+    wgRender();
+  });
+
+  wgRender();
+  wgHeat();
+</script>
+</body>
+</html>
